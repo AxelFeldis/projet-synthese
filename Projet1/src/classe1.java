@@ -6,17 +6,22 @@ import java.net.URL;
 import java.net.MalformedURLException;
 //import java.util.*;
 //import com.aetrion.flickr.tags.*;
-import org.jinstagram.*;
-import org.jinstagram.auth.oauth.*;
-import org.jinstagram.auth.*;
-import org.scribe.*;
+//import org.jinstagram.*;
+//import org.jinstagram.auth.model.Verifier;
+//import org.jinstagram.auth.oauth.*;
+//import org.jinstagram.auth.*;
+//import org.scribe.*;
+//import org.scribe.model.Token;
 
 public class classe1 {
+	//private static final Token token = null;
 
 	/**
 	 * @param args
 	 */
+	//private static final Token EMPTY_TOKEN = null;
 	public static void main(String[] args) {
+		//Token token = new Token(null, null);
 		
 		Fenetre fenetre1 = new Fenetre("ApplicationJava", 1000, 1000);		//Creation d'une fenetre
 		
@@ -26,7 +31,7 @@ public class classe1 {
 		//fenetre1.setVisible(true);											//Creation d'un élement de type Photolist
 		
 		SearchParameters param = new SearchParameters();
-		String[] tabTags = {"tumeur","pénis"};									//Definition des tags
+		String[] tabTags = {"Muraille de Chine"};									//Definition des tags
 		param.setTags(tabTags);
 		
 		
@@ -75,11 +80,14 @@ public class classe1 {
 		}
 		
 		//Tentative avec instagram
-		InstagramService service = new InstagramAuthService()
-										.apiKey("id")
-										.apiSecret("secret")
-										.callback("url")
-										.build();
+		//InstagramService service = new InstagramAuthService()
+										//.apiKey("0c5416aac7cc4d3a98a8b7cce2baf7c5")
+										//.apiSecret("a3c80dff43d741ed8f47dcd96751abf8")
+										//.callback("http://google.com")
+										//.build();
+		//String authorizationUrl = service.getAuthorizationUrl(EMPTY_TOKEN);
+		//Verifier verifier = new Verifier("verifier you get from the user");
+		//Token accessToken = service.getAccessToken(token, verifier);
 	    
 	    fenetre1.dispose();														//On ferme la fenetre
 	    
