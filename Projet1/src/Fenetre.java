@@ -24,7 +24,7 @@ public class Fenetre extends JFrame {
 	}
 	
 	private void build() {
-		setTitle("VisioScop");							//Nom 
+		setTitle("VisioScope");							//Nom 
 		setSize(1000, 800); 							//Taille
 		setResizable(false);							//Redimentionnable ou non, ici non
 		setLocationRelativeTo(null);					//Centrer la fenêtre sur l'écran
