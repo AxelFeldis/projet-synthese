@@ -24,9 +24,9 @@ public class Fenetre extends JFrame {
 	}
 	
 	private void build() {
-		setTitle("VisioScop");							//Nom 
+		setTitle("VisioScope");							//Nom 
 		setSize(1000, 800); 							//Taille
-		setResizable(false);							//Redimentionnable ou non, ici non
+		setResizable(true);							//Redimentionnable ou non, ici non
 		setLocationRelativeTo(null);					//Centrer la fenêtre sur l'écran
 		setContentPane(buildContentPanel());			//On lui associe un Panel directement créé par la méthode buildContentPanel definit ci-dessous
 		setDefaultCloseOperation(this.EXIT_ON_CLOSE);	//La fenêtre se ferme lors du clic sur la croix
@@ -46,7 +46,7 @@ public class Fenetre extends JFrame {
 		motCherche.setColumns(10);
 		Panel.add(motCherche);
 		
-		ok = new JButton(new RecuperationPhoto(this, "OK!"));	//Création et ajout du bouton ok
+		ok = new JButton(new Visiter(this, "OK!"));	//Création et ajout du bouton ok
 		Panel.add(ok);
 		
 		labelImage = new JLabel();								//Création et ajout du label1
