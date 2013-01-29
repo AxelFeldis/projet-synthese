@@ -5,12 +5,12 @@ public class classe1 {
 	 * @param args
 	 */	
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable(){			//Création d'un thread??????????  éxécution du code en parallèle de celui-ci
-			public void run(){
-				Fenetre fenetre = new Fenetre();			//qui crée une fenêtre
+		//SwingUtilities.invokeLater(new Runnable(){			//Crï¿½ation d'un thread??????????  ï¿½xï¿½cution du code en parallï¿½le de celui-ci
+			//public void run(){
+				Fenetre fenetre = new Fenetre();			//qui crï¿½e une fenï¿½tre
 				fenetre.setVisible(true);					//et la rend visible.
-			}
-		});
+			//}
+		//});
 	
 	}
 
