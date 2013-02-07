@@ -25,10 +25,23 @@ public class Fenetre extends JFrame {
 
 	// private JPanel Panel; //C'est ce qui contiendra tous les �l�ments de
 	// notre fen�tre
+	private JLabel labelTitre;
 	private JLabel label1; // Label fixe : "Veuillez saisir un monument :"
 	private JTextField motCherche; // El�ment qui permet � l'utilisateur de
 									// saisir sa recherche
 	private JButton ok; // Bouton de validation
+	private JButton visAl;
+	private JButton visIn;
+	private JButton visOut;
+	private JTextArea resume;
+	private JButton S;
+	private JButton W;
+	private JButton NW;
+	private JButton N;
+	private JButton NE;
+	private JButton E;
+	private JButton quitter;
+	
 	private JButton precedent;
 	private JButton suivant;
 	private JLabel labelImage; // Label qui contiendra les images
@@ -68,18 +81,36 @@ public class Fenetre extends JFrame {
 		// pack();
 
 		// definition des noms d'objets d'interface
+		labelTitre = new JLabel("VisioScope");
 		label1 = new JLabel("Veuillez saisir un monument");
 		motCherche = new JTextField("");
 		motCherche.setColumns(10);
 		ok = new JButton("Let's go!");
 		ok.addActionListener(new Visiter());
+		
+		visAl = new JButton("Aléatoire");
+		visIn = new JButton("Intérieure");
+		visOut = new JButton("Extérieure");
+		
+		resume = new JTextArea("Bienvenue sur VisioScope, ");
+		
+		S = new JButton("S");
+		W = new JButton("W");
+		NW = new JButton("NW");
+		N = new JButton("N");
+		NE = new JButton("NE");
+		E = new JButton("E");
+		
+		quitter = new JButton("Quitter");
+		
 		suivant = new JButton("Suivant");
 		suivant.addActionListener(new Suivant());
 		suivant.setVisible(false);
 		precedent = new JButton("Precedent");
 		precedent.setVisible(false);
 		precedent.addActionListener(new Precedent());
-		labelImage = new JLabel();
+		labelImage = new JLabel("Image");
+		labelImage.setSize(new Dimension(400, 300));
 
 		// Definition des objets utilisés pour placer l'interface
 		GridBagLayout placeur = new GridBagLayout();
@@ -87,6 +118,11 @@ public class Fenetre extends JFrame {
 		getContentPane().setLayout(placeur);
 
 		// placement des objets
+		
+		JPanel panelGauche = new JPanel();
+		GridBagLayout placeurGauche = new GridBagLayout();
+		panelGauche.setLayout(placeurGauche);
+		
 
 		contraintes.gridx = 0;
 		contraintes.gridy = 0;
@@ -97,25 +133,43 @@ public class Fenetre extends JFrame {
 		contraintes.fill = GridBagConstraints.NONE;
 		contraintes.anchor = GridBagConstraints.WEST;
 		contraintes.insets = new Insets(2, 2, 2, 2);
-		contraintes.weightx = 0;
-		contraintes.weighty = 0;
-		placeur.setConstraints(label1, contraintes);
-		getContentPane().add(label1);
+		contraintes.weightx = 100;
+		contraintes.weighty = 100;
+		placeur.setConstraints(panelGauche, contraintes);
+		getContentPane().add(panelGauche);
+		
+		JPanel panelDroit = new JPanel();
+		GridBagLayout placeurDroit = new GridBagLayout();
+		panelDroit.setLayout(placeurDroit);
+		
+		contraintes.gridx = 1;
+		contraintes.gridy = 0;
+		contraintes.gridwidth = 2;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 100;
+		contraintes.weighty = 100;
+		placeur.setConstraints(panelDroit, contraintes);
+		getContentPane().add(panelDroit);
 
 		contraintes.gridx = 0;
 		contraintes.gridy = 1;
-		contraintes.gridwidth = 1;
+		contraintes.gridwidth = 2;
 		contraintes.gridheight = 1;
 		contraintes.ipadx = 2;
 		contraintes.ipady = 2;
 		contraintes.fill = GridBagConstraints.NONE;
-		contraintes.anchor = GridBagConstraints.WEST;
+		contraintes.anchor = GridBagConstraints.NORTH;
 		contraintes.insets = new Insets(2, 2, 2, 2);
 		contraintes.weightx = 0;
 		contraintes.weighty = 0;
-		placeur.setConstraints(motCherche, contraintes);
-		getContentPane().add(motCherche);
-
+		placeurGauche.setConstraints(motCherche, contraintes);
+		panelGauche.add(motCherche);
+		
 		contraintes.gridx = 2;
 		contraintes.gridy = 1;
 		contraintes.gridwidth = 1;
@@ -127,11 +181,11 @@ public class Fenetre extends JFrame {
 		contraintes.insets = new Insets(2, 2, 2, 2);
 		contraintes.weightx = 0;
 		contraintes.weighty = 0;
-		placeur.setConstraints(precedent, contraintes);
-		getContentPane().add(precedent);
-
-		contraintes.gridx = 3;
-		contraintes.gridy = 1;
+		placeurGauche.setConstraints(ok, contraintes);
+		panelGauche.add(ok); 
+		
+		contraintes.gridx = 0;
+		contraintes.gridy = 2;
 		contraintes.gridwidth = 1;
 		contraintes.gridheight = 1;
 		contraintes.ipadx = 2;
@@ -141,36 +195,261 @@ public class Fenetre extends JFrame {
 		contraintes.insets = new Insets(2, 2, 2, 2);
 		contraintes.weightx = 0;
 		contraintes.weighty = 0;
-		placeur.setConstraints(labelImage, contraintes);
-		getContentPane().add(labelImage);
-
-		contraintes.gridx = 4;
-		contraintes.gridy = 1;
-		contraintes.gridwidth = 1;
-		contraintes.gridheight = 1;
-		contraintes.ipadx = 2;
-		contraintes.ipady = 2;
-		contraintes.fill = GridBagConstraints.NONE;
-		contraintes.anchor = GridBagConstraints.CENTER;
-		contraintes.insets = new Insets(2, 2, 2, 2);
-		contraintes.weightx = 0;
-		contraintes.weighty = 0;
-		placeur.setConstraints(suivant, contraintes);
-		getContentPane().add(suivant);
-
+		placeurGauche.setConstraints(visAl, contraintes);
+		panelGauche.add(visAl);
+		
+		
 		contraintes.gridx = 1;
-		contraintes.gridy = 1;
+		contraintes.gridy = 2;
 		contraintes.gridwidth = 1;
 		contraintes.gridheight = 1;
 		contraintes.ipadx = 2;
 		contraintes.ipady = 2;
 		contraintes.fill = GridBagConstraints.NONE;
-		contraintes.anchor = GridBagConstraints.WEST;
+		contraintes.anchor = GridBagConstraints.CENTER;
 		contraintes.insets = new Insets(2, 2, 2, 2);
 		contraintes.weightx = 0;
 		contraintes.weighty = 0;
-		placeur.setConstraints(ok, contraintes);
-		getContentPane().add(ok);
+		placeurGauche.setConstraints(visIn, contraintes);
+		panelGauche.add(visIn);
+		
+		
+		contraintes.gridx = 2;
+		contraintes.gridy = 2;
+		contraintes.gridwidth = 1;
+		contraintes.gridheight = 1;
+//		contraintes.ipadx = 2;
+//		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.NONE;
+//		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurGauche.setConstraints(visOut, contraintes);
+		panelGauche.add(visOut);
+		
+		contraintes.gridx = 0;
+		contraintes.gridy = 3;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 2;
+//		contraintes.ipadx = 2;
+//		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.NONE;
+		contraintes.anchor = GridBagConstraints.SOUTH;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		//contraintes.weightx = 0;
+		//contraintes.weighty = 0;
+		placeurGauche.setConstraints(resume, contraintes);
+		panelGauche.add(resume);
+		
+//		panelDroit.add(precedent, BorderLayout.WEST);
+//		panelDroit.add(suivant, BorderLayout.EAST);
+//		panelDroit.add(labelImage, BorderLayout.CENTER);
+//		panelDroit.add(labelTitre, BorderLayout.NORTH);
+		
+		contraintes.gridx = 1;
+		contraintes.gridy = 0;
+		contraintes.gridwidth = 4;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(labelTitre, contraintes);
+		panelDroit.add(labelTitre);
+		
+		contraintes.gridx = 2;
+		contraintes.gridy = 2;
+		contraintes.gridwidth = 2;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(N, contraintes);
+		panelDroit.add(N);
+		
+		contraintes.gridx = 0;
+		contraintes.gridy = 3;
+		contraintes.gridwidth = 1;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(NW, contraintes);
+		panelDroit.add(NW);
+		
+		contraintes.gridx = 5;
+		contraintes.gridy = 3;
+		contraintes.gridwidth = 1;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(NE, contraintes);
+		panelDroit.add(NE);
+		
+		contraintes.gridx = 0;
+		contraintes.gridy = 4;
+		contraintes.gridwidth = 1;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(W, contraintes);
+		panelDroit.add(W);
+		
+		contraintes.gridx = 5;
+		contraintes.gridy = 4;
+		contraintes.gridwidth = 1;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(E, contraintes);
+		panelDroit.add(E);
+		
+		contraintes.gridx = 2;
+		contraintes.gridy = 6;
+		contraintes.gridwidth = 2;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(S, contraintes);
+		panelDroit.add(S);
+		
+		contraintes.gridx = 1;
+		contraintes.gridy = 3;
+		contraintes.gridwidth = 4;
+		contraintes.gridheight = 3;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(labelImage, contraintes);
+		panelDroit.add(labelImage);
+		
+		contraintes.gridx = 5;
+		contraintes.gridy = 8;
+		contraintes.gridwidth = 1;
+		contraintes.gridheight = 1;
+		contraintes.ipadx = 2;
+		contraintes.ipady = 2;
+		contraintes.fill = GridBagConstraints.BOTH;
+		contraintes.anchor = GridBagConstraints.CENTER;
+		contraintes.insets = new Insets(2, 2, 2, 2);
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		placeurDroit.setConstraints(quitter, contraintes);
+		panelDroit.add(quitter);
+		
+//		contraintes.gridx = 1;
+//		contraintes.gridy = 2;
+//		contraintes.gridwidth = 1;
+//		contraintes.gridheight = 1;
+//		contraintes.ipadx = 2;
+//		contraintes.ipady = 2;
+//		contraintes.fill = GridBagConstraints.NONE;
+//		contraintes.anchor = GridBagConstraints.CENTER;
+//		contraintes.insets = new Insets(2, 2, 2, 2);
+//		contraintes.weightx = 0;
+//		contraintes.weighty = 0;
+//		placeurDroit.setConstraints(precedent, contraintes);
+//		panelDroit.add(precedent);
+//		
+//		contraintes.gridx = 4;
+//		contraintes.gridy = 2;
+//		contraintes.gridwidth = 1;
+//		contraintes.gridheight = 1;
+//		contraintes.ipadx = 2;
+//		contraintes.ipady = 2;
+//		contraintes.fill = GridBagConstraints.NONE;
+//		contraintes.anchor = GridBagConstraints.CENTER;
+//		contraintes.insets = new Insets(2, 2, 2, 2);
+//		contraintes.weightx = 0;
+//		contraintes.weighty = 0;
+//		placeurDroit.setConstraints(suivant, contraintes);
+//		panelDroit.add(suivant);
+		
+		JPanel panelBas = new JPanel();
+		GridBagLayout placeurBas = new GridBagLayout();
+		panelBas.setLayout(placeurBas);
+		
+		
+
+//		contraintes.gridx = 1;
+//		contraintes.gridy = 1;
+//		contraintes.gridwidth = 1;
+//		contraintes.gridheight = 1;
+//		contraintes.ipadx = 2;
+//		contraintes.ipady = 2;
+//		contraintes.fill = GridBagConstraints.NONE;
+//		contraintes.anchor = GridBagConstraints.CENTER;
+//		contraintes.insets = new Insets(2, 2, 2, 2);
+//		contraintes.weightx = 0;
+//		contraintes.weighty = 0;
+//		placeur.setConstraints(precedent, contraintes);
+//		getContentPane().add(precedent);
+//
+//		contraintes.gridx = 3;
+//		contraintes.gridy = 1;
+//		contraintes.gridwidth = 1;
+//		contraintes.gridheight = 1;
+//		contraintes.ipadx = 2;
+//		contraintes.ipady = 2;
+//		contraintes.fill = GridBagConstraints.NONE;
+//		contraintes.anchor = GridBagConstraints.CENTER;
+//		contraintes.insets = new Insets(2, 2, 2, 2);
+//		contraintes.weightx = 0;
+//		contraintes.weighty = 0;
+//		placeur.setConstraints(labelImage, contraintes);
+//		getContentPane().add(labelImage);
+//
+//		contraintes.gridx = 4;
+//		contraintes.gridy = 1;
+//		contraintes.gridwidth = 1;
+//		contraintes.gridheight = 1;
+//		contraintes.ipadx = 2;
+//		contraintes.ipady = 2;
+//		contraintes.fill = GridBagConstraints.NONE;
+//		contraintes.anchor = GridBagConstraints.CENTER;
+//		contraintes.insets = new Insets(2, 2, 2, 2);
+//		contraintes.weightx = 0;
+//		contraintes.weighty = 0;
+//		placeur.setConstraints(suivant, contraintes);
+//		getContentPane().add(suivant);
+
+		
 
 	}
 
@@ -339,85 +618,153 @@ public class Fenetre extends JFrame {
 
 		}
 
-		public void affichageImage(URL url) {
-			ImageIcon img = new ImageIcon(url);
-			labelImage.setIcon(img);
-			// fenetre.getContentPane().add(fenetre.getLabelPhoto());
-		}
+//		public void affichageImage(URL url) {
+//			ImageIcon img = new ImageIcon(url);
+//			labelImage.setIcon(img);
+//			// fenetre.getContentPane().add(fenetre.getLabelPhoto());
+//		}
 
-		public Photo[] recupererPhoto(String tagUtilisateur)
-				throws IOException, SAXException, FlickrException {
-			Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122"); // création
-			// d'un
-			// élément
-			// de
-			// type
-			// Flickr
-			PhotosInterface photosInterface = apiAccess.getPhotosInterface(); // création
-			// d'un
-			// élément
-			// de
-			// type
-			// PhotoInterface
-			geoInterface = apiAccess.getGeoInterface(); // creation d'un élément
-														// de
-			// type GeoInterface
-			PhotoList listePhoto1 = new PhotoList();
-			Photo[] tab = new Photo[100];
-
-			SearchParameters param = new SearchParameters(); // Création d'un
-			// paramètre de
-			// recherche
-			String[] tabTags = { tagUtilisateur }; // Definition du tag en
-													// fonction
-			param.setHasGeo(true); // du texte tapé
-			param.setTags(tabTags); // On definit le paramètre avec ce tag
-			param.setBBox("2", "48", "3", "49");
-			//param.setMaxUploadDate(new Date(new Long(0)));
-			// param.setMinUploadDate(new Date(System.currentTimeMillis()));
-			// System.out.println(param.getHasGeo());
-
-			try {
-				listePhoto1 = photosInterface.search(param, 100, 0); // Récupération
-				// d'une
-				// liste
-				// de photos
-			} catch (FlickrException e3) { // on lève toutes les exceptions
-				// possibles
-				System.out.println(e3.getErrorMessage());
-			} catch (IOException e1) {
-				System.out.println(e1);
-			} catch (SAXException e2) {
-				System.out.println(e2.getMessage());
-			}
-
-			// ON MET LES PHOTOS DANS UN TABLEAU
-
-			for (int i = 0; i <= 99; i++) {
-				// if (new Float(48.0) <
-				// geoInterface.getLocation(tabPhotos[i].getId()).getLatitude())
-				// (geoInterface.getLocation(tabPhotos[i].getId()).getLatitude()
-				// >
-				// new Float(49)) &&
-				// (new Float(2) <
-				// geoInterface.getLocation(tabPhotos[i].getId()).getLongitude())
-				// &&
-				// (geoInterface.getLocation(tabPhotos[i].getId()).getLongitude()
-				// >
-				// new Float(3)))
-				// {
-				tab[i] = (Photo) listePhoto1.get(i);
-				// j++;
-				// }
-			}
-			return tab;
-		}
+//		public Photo[] recupererPhoto(String tagUtilisateur)
+//				throws IOException, SAXException, FlickrException {
+//			Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122"); // création
+//			// d'un
+//			// élément
+//			// de
+//			// type
+//			// Flickr
+//			PhotosInterface photosInterface = apiAccess.getPhotosInterface(); // création
+//			// d'un
+//			// élément
+//			// de
+//			// type
+//			// PhotoInterface
+//			geoInterface = apiAccess.getGeoInterface(); // creation d'un élément
+//														// de
+//			// type GeoInterface
+//			PhotoList listePhoto1 = new PhotoList();
+//			Photo[] tab = new Photo[100];
+//
+//			SearchParameters param = new SearchParameters(); // Création d'un
+//			// paramètre de
+//			// recherche
+//			String[] tabTags = { tagUtilisateur }; // Definition du tag en
+//													// fonction
+//			param.setHasGeo(true); // du texte tapé
+//			param.setTags(tabTags); // On definit le paramètre avec ce tag
+//			param.setBBox("2", "48", "3", "49");
+//			//param.setMaxUploadDate(new Date(new Long(0)));
+//			// param.setMinUploadDate(new Date(System.currentTimeMillis()));
+//			// System.out.println(param.getHasGeo());
+//
+//			try {
+//				listePhoto1 = photosInterface.search(param, 100, 0); // Récupération
+//				// d'une
+//				// liste
+//				// de photos
+//			} catch (FlickrException e3) { // on lève toutes les exceptions
+//				// possibles
+//				System.out.println(e3.getErrorMessage());
+//			} catch (IOException e1) {
+//				System.out.println(e1);
+//			} catch (SAXException e2) {
+//				System.out.println(e2.getMessage());
+//			}
+//
+//			// ON MET LES PHOTOS DANS UN TABLEAU
+//
+//			for (int i = 0; i <= 99; i++) {
+//				// if (new Float(48.0) <
+//				// geoInterface.getLocation(tabPhotos[i].getId()).getLatitude())
+//				// (geoInterface.getLocation(tabPhotos[i].getId()).getLatitude()
+//				// >
+//				// new Float(49)) &&
+//				// (new Float(2) <
+//				// geoInterface.getLocation(tabPhotos[i].getId()).getLongitude())
+//				// &&
+//				// (geoInterface.getLocation(tabPhotos[i].getId()).getLongitude()
+//				// >
+//				// new Float(3)))
+//				// {
+//				tab[i] = (Photo) listePhoto1.get(i);
+//				// j++;
+//				// }
+//			}
+//			return tab;
+//		}
 	}
 	
 	public void affichageImage(URL url) {
 		ImageIcon img = new ImageIcon(url);
 		labelImage.setIcon(img);
 		// fenetre.getContentPane().add(fenetre.getLabelPhoto());
+	}
+	
+	public Photo[] recupererPhoto(String tagUtilisateur)
+			throws IOException, SAXException, FlickrException {
+		Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122"); // création
+		// d'un
+		// élément
+		// de
+		// type
+		// Flickr
+		PhotosInterface photosInterface = apiAccess.getPhotosInterface(); // création
+		// d'un
+		// élément
+		// de
+		// type
+		// PhotoInterface
+		geoInterface = apiAccess.getGeoInterface(); // creation d'un élément
+													// de
+		// type GeoInterface
+		PhotoList listePhoto1 = new PhotoList();
+		Photo[] tab = new Photo[100];
+
+		SearchParameters param = new SearchParameters(); // Création d'un
+		// paramètre de
+		// recherche
+		String[] tabTags = { tagUtilisateur }; // Definition du tag en
+												// fonction
+		param.setHasGeo(true); // du texte tapé
+		param.setTags(tabTags); // On definit le paramètre avec ce tag
+		param.setBBox("2", "48", "3", "49");
+		//param.setMaxUploadDate(new Date(new Long(0)));
+		// param.setMinUploadDate(new Date(System.currentTimeMillis()));
+		// System.out.println(param.getHasGeo());
+
+		try {
+			listePhoto1 = photosInterface.search(param, 100, 0); // Récupération
+			// d'une
+			// liste
+			// de photos
+		} catch (FlickrException e3) { // on lève toutes les exceptions
+			// possibles
+			System.out.println(e3.getErrorMessage());
+		} catch (IOException e1) {
+			System.out.println(e1);
+		} catch (SAXException e2) {
+			System.out.println(e2.getMessage());
+		}
+
+		// ON MET LES PHOTOS DANS UN TABLEAU
+
+		for (int i = 0; i <= 99; i++) {
+			// if (new Float(48.0) <
+			// geoInterface.getLocation(tabPhotos[i].getId()).getLatitude())
+			// (geoInterface.getLocation(tabPhotos[i].getId()).getLatitude()
+			// >
+			// new Float(49)) &&
+			// (new Float(2) <
+			// geoInterface.getLocation(tabPhotos[i].getId()).getLongitude())
+			// &&
+			// (geoInterface.getLocation(tabPhotos[i].getId()).getLongitude()
+			// >
+			// new Float(3)))
+			// {
+			tab[i] = (Photo) listePhoto1.get(i);
+			// j++;
+			// }
+		}
+		return tab;
 	}
 
 }
