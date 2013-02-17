@@ -22,6 +22,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,16 +41,26 @@ import com.aetrion.flickr.photos.PhotoList;
 import com.aetrion.flickr.photos.PhotosInterface;
 import com.aetrion.flickr.photos.SearchParameters;
 import com.aetrion.flickr.photos.geo.GeoInterface;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
+import javax.swing.JProgressBar;
 
 public class FenetreWB {
 
 	private JFrame frmVisioscope;
 	private JTextField txtTapezVotreRecherche;
 	private JLabel lblNewLabel;
-	private JButton btnNewButton_1;
-	private JButton btnNewButton;
-	private JComboBox comboBox;
-	private URL url1; // url de la photo
+	private JButton btnPrec;
+	private JButton btnOk;
+	private JButton btnO;
+	private JButton btnS;
+	private JButton btnE;
+	private JButton btnN;
+	private JButton btnNO;
+	private JButton btnNE;
+	private JButton btnSuiv;
+	JComboBox comboBox;
+	URL url1; // url de la photo
 	public Photo[] tabPhotosVrac; // tableau de photo
 	public Photo[][] tabPhotosOrdonnees; // tableau de photo
 	private GeoInterface geoInterface; // Interface qui permettra de géré les
@@ -56,8 +68,12 @@ public class FenetreWB {
 	private GeoData positionGeographique; // géoData qui permettra de récupérer
 											// la longitude et la latitude
 	public Integer i = 0;
-	private int colonne = 0;
-	private int ligne = 0;
+	int colonne = 0;
+	int ligne = 0;
+	private MonThread thread;
+	private JProgressBar progressBar;
+	int compteur = 0;
+	int etat = 0;
 
 	/**
 	 * Launch the application.
@@ -90,7 +106,7 @@ public class FenetreWB {
 		frmVisioscope.getContentPane().setBackground(Color.DARK_GRAY);
 		frmVisioscope.setFont(new Font("Arial", Font.BOLD, 12));
 		frmVisioscope.setTitle("VisioScope");
-		frmVisioscope.setSize(1500, 800);
+		frmVisioscope.setSize(1000, 800);
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -137,8 +153,6 @@ public class FenetreWB {
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		Dimension taille = new Dimension(1000, 650);
 		lblNewLabel.setMinimumSize(new Dimension(1050, 650));
-		// lblNewLabel.setMaximumSize(taille);
-		// lblNewLabel.setPreferredSize(taille);
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridheight = 19;
 		gbc_lblNewLabel.gridwidth = 29;
@@ -148,6 +162,42 @@ public class FenetreWB {
 
 		// Champs qui permet à l'utilisateur de saisir sa recherche
 		txtTapezVotreRecherche = new JTextField();
+		txtTapezVotreRecherche.addMouseListener(new MouseListener(){
+			public void mousePressed(MouseEvent e) {
+		      //TODO : effacer le texte
+				//if (txtTapezVotreRecherche.getText() == "Tapez votre recherche") {
+					txtTapezVotreRecherche.setText("");
+				//}
+				
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+//				//if (txtTapezVotreRecherche.getText() == "Tapez votre recherche") {
+//					txtTapezVotreRecherche.setText("");
+//				//}
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		   });
 		txtTapezVotreRecherche.setText("Tapez votre recherche");
 		GridBagConstraints gbc_txtTapezVotreRecherche = new GridBagConstraints();
 		gbc_txtTapezVotreRecherche.gridwidth = 7;
@@ -172,78 +222,57 @@ public class FenetreWB {
 		comboBox.addItem("Visite extérieure");
 		comboBox.addItem("Photos aléatoires");
 
+		progressBar = new JProgressBar();
+		GridBagConstraints gbc_progressBar = new GridBagConstraints();
+		gbc_progressBar.gridwidth = 5;
+		gbc_progressBar.insets = new Insets(0, 0, 5, 5);
+		gbc_progressBar.gridx = 6;
+		gbc_progressBar.gridy = 7;
+		frmVisioscope.getContentPane().add(progressBar, gbc_progressBar);
+
 		// BOUTON OK!!!!!!!!!!!!!!!
-		JButton btnNewButton_2 = new JButton("Ok!");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		btnOk = new JButton("Ok!");
+		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (comboBox.getSelectedIndex() == 2) {
+					etat = 1;
 					// on récupère le texte tapé par l'utilisateur
 					// String tagDemande = txtTapezVotreRecherche.getText();
-					try {
-						tabPhotosVrac = recupererPhotosVrac();
-					} catch (IOException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					} catch (SAXException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					} catch (FlickrException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					// On récupère l'url de la photo sous forme de string
-					String urlString1 = tabPhotosVrac[i].getMediumUrl();
-					System.out.println(urlString1);
+					thread = new MonThread(FenetreWB.this, 100);
+					thread.start();
 
-					try {
-						// On essaye de transfomer urlString en type URL
-						url1 = new URL(urlString1);
-					} catch (MalformedURLException e1) {
-						System.out.println(e1.getMessage());
-					}
-
-					affichageImage(url1);
-
-					btnNewButton.setVisible(true);
-					btnNewButton_1.setVisible(true);
+					
 				}
 				if (comboBox.getSelectedIndex() == 0) {
-					// on récupère le texte tapé par l'utilisateur
-					// String tagDemande = txtTapezVotreRecherche.getText();
+					etat = 2;
+					thread = new MonThread(FenetreWB.this, 16);
+					thread.start();
 					try {
-						tabPhotosOrdonnees = recupererPhotosOrdonnees(25, 78.040674, 27.171792,  78.043635, 27.174541);
-					} catch (IOException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					} catch (SAXException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					} catch (FlickrException e2) {
+						Thread.sleep(1000);
+					} catch (InterruptedException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
 					}
-					// On récupère l'url de la photo sous forme de string
-					String urlString1 = tabPhotosOrdonnees[ligne][colonne]
-							.getMediumUrl();
-					System.out.println(urlString1);
-
-					try {
-						// On essaye de transfomer urlString en type URL
-						url1 = new URL(urlString1);
-					} catch (MalformedURLException e1) {
-						System.out.println(e1.getMessage());
-					}
-
-					affichageImage(url1);
+					affichageImage();
+					btnOk.setVisible(true);
+					btnO.setVisible(true);
+					btnS.setVisible(true);
+					btnE.setVisible(true);
+					btnSuiv.setVisible(true);
+					btnPrec.setVisible(true);
+					btnN.setVisible(true);
+					btnNO.setVisible(true);
+					btnNE.setVisible(true);
+					
 
 				}
 			}
 		});
-		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
-		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_2.gridx = 12;
-		gbc_btnNewButton_2.gridy = 6;
-		frmVisioscope.getContentPane().add(btnNewButton_2, gbc_btnNewButton_2);
+		GridBagConstraints gbc_btnOk = new GridBagConstraints();
+		gbc_btnOk.insets = new Insets(0, 0, 5, 5);
+		gbc_btnOk.gridx = 12;
+		gbc_btnOk.gridy = 6;
+		frmVisioscope.getContentPane().add(btnOk, gbc_btnOk);
 
 		// Zone de texte expliquant l'application
 		JTextArea txtrBienvenueSurVisioscope = new JTextArea();
@@ -265,217 +294,175 @@ public class FenetreWB {
 				gbc_txtrBienvenueSurVisioscope);
 
 		// BOUTON DE LE VISITE EN VRAC
-		btnNewButton_1 = new JButton("Précédent");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		btnPrec = new JButton("Précédent");
+		btnPrec.setVisible(false);
+		btnPrec.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				i = i - 1;
-				// On récupère l'url de la photo sous forme de string
-				String urlString1 = tabPhotosVrac[i].getMediumUrl();
-				System.out.println(urlString1);
-
-				try {
-					// On essaye de transfomer urlString en type URL
-					url1 = new URL(urlString1);
-				} catch (MalformedURLException e1) {
-					System.out.println(e1.getMessage());
-				}
-
-				affichageImage(url1);
-				try {
-					positionGeographique = geoInterface
-							.getLocation(tabPhotosVrac[i].getId());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SAXException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (FlickrException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				System.out.println(positionGeographique.getLatitude());
-				System.out.println(positionGeographique.getLongitude());
+				affichageImage();
 			}
 		});
-		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_1.gridx = 19;
-		gbc_btnNewButton_1.gridy = 23;
-		frmVisioscope.getContentPane().add(btnNewButton_1, gbc_btnNewButton_1);
+		GridBagConstraints gbc_btnPrec = new GridBagConstraints();
+		gbc_btnPrec.insets = new Insets(0, 0, 5, 5);
+		gbc_btnPrec.gridx = 19;
+		gbc_btnPrec.gridy = 23;
+		frmVisioscope.getContentPane().add(btnPrec, gbc_btnPrec);
 
-		btnNewButton = new JButton(" Suivant ");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnSuiv = new JButton(" Suivant ");
+		btnSuiv.setVisible(false);
+		btnSuiv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				i = i + 1;
-				// On récupère l'url de la photo sous forme de string
-				String urlString1 = tabPhotosVrac[i].getMediumUrl();
-				System.out.println(urlString1);
-
-				try {
-					// On essaye de transfomer urlString en type URL
-					url1 = new URL(urlString1);
-				} catch (MalformedURLException e1) {
-					System.out.println(e1.getMessage());
-				}
-
-				affichageImage(url1);
-				try {
-					positionGeographique = geoInterface
-							.getLocation(tabPhotosVrac[i].getId());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SAXException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (FlickrException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				System.out.println(positionGeographique.getLatitude());
-				System.out.println(positionGeographique.getLongitude());
+				affichageImage();
 			}
 		});
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton.gridx = 47;
-		gbc_btnNewButton.gridy = 23;
-		frmVisioscope.getContentPane().add(btnNewButton, gbc_btnNewButton);
+		GridBagConstraints gbc_btnSuiv = new GridBagConstraints();
+		gbc_btnSuiv.insets = new Insets(0, 0, 5, 5);
+		gbc_btnSuiv.gridx = 47;
+		gbc_btnSuiv.gridy = 23;
+		frmVisioscope.getContentPane().add(btnSuiv, gbc_btnSuiv);
 
 		// BOUTON DE LA VISITE DE OUF
-		JButton btnHautGauche = new JButton("Haut Gauche");
-		btnHautGauche.addActionListener(new ActionListener() {
+		btnNO = new JButton("Haut Gauche");
+		btnNO.setVisible(false);
+		btnNO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seDeplacer("NO");
 			}
 		});
-		GridBagConstraints gbc_btnHautGauche = new GridBagConstraints();
-		gbc_btnHautGauche.gridwidth = 3;
-		gbc_btnHautGauche.insets = new Insets(0, 0, 5, 5);
-		gbc_btnHautGauche.gridx = 28;
-		gbc_btnHautGauche.gridy = 23;
-		frmVisioscope.getContentPane().add(btnHautGauche, gbc_btnHautGauche);
+		GridBagConstraints gbc_btnNO = new GridBagConstraints();
+		gbc_btnNO.gridwidth = 3;
+		gbc_btnNO.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNO.gridx = 28;
+		gbc_btnNO.gridy = 23;
+		frmVisioscope.getContentPane().add(btnNO, gbc_btnNO);
 
-		JButton btnHaut = new JButton("Haut");
-		btnHaut.addActionListener(new ActionListener() {
+		btnN = new JButton("Haut");
+		btnN.setVisible(false);
+		btnN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seDeplacer("N");
 			}
 		});
-		GridBagConstraints gbc_btnHaut = new GridBagConstraints();
-		gbc_btnHaut.gridwidth = 3;
-		gbc_btnHaut.insets = new Insets(0, 0, 5, 5);
-		gbc_btnHaut.gridx = 31;
-		gbc_btnHaut.gridy = 23;
-		frmVisioscope.getContentPane().add(btnHaut, gbc_btnHaut);
+		GridBagConstraints gbc_btnN = new GridBagConstraints();
+		gbc_btnN.gridwidth = 3;
+		gbc_btnN.insets = new Insets(0, 0, 5, 5);
+		gbc_btnN.gridx = 31;
+		gbc_btnN.gridy = 23;
+		frmVisioscope.getContentPane().add(btnN, gbc_btnN);
 
-		JButton btnHautDroite = new JButton("Haut Droite");
-		btnHautDroite.addActionListener(new ActionListener() {
+		btnNE = new JButton("Haut Droite");
+		btnNE.setVisible(false);
+		btnNE.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seDeplacer("NE");
 			}
 		});
-		GridBagConstraints gbc_btnHautDroite = new GridBagConstraints();
-		gbc_btnHautDroite.gridwidth = 3;
-		gbc_btnHautDroite.insets = new Insets(0, 0, 5, 5);
-		gbc_btnHautDroite.gridx = 34;
-		gbc_btnHautDroite.gridy = 23;
-		frmVisioscope.getContentPane().add(btnHautDroite, gbc_btnHautDroite);
+		GridBagConstraints gbc_btnNE = new GridBagConstraints();
+		gbc_btnNE.gridwidth = 3;
+		gbc_btnNE.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNE.gridx = 34;
+		gbc_btnNE.gridy = 23;
+		frmVisioscope.getContentPane().add(btnNE, gbc_btnNE);
 
-		JButton btnNewButton_3 = new JButton("    Gauche    ");
-		btnNewButton_3.addActionListener(new ActionListener() {
+		btnO = new JButton("    Gauche    ");
+		btnO.setVisible(false);
+		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seDeplacer("O");
 			}
 		});
-		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
-		gbc_btnNewButton_3.gridwidth = 3;
-		gbc_btnNewButton_3.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_3.gridx = 28;
-		gbc_btnNewButton_3.gridy = 24;
-		frmVisioscope.getContentPane().add(btnNewButton_3, gbc_btnNewButton_3);
+		GridBagConstraints gbc_btnO = new GridBagConstraints();
+		gbc_btnO.gridwidth = 3;
+		gbc_btnO.insets = new Insets(0, 0, 5, 5);
+		gbc_btnO.gridx = 28;
+		gbc_btnO.gridy = 24;
+		frmVisioscope.getContentPane().add(btnO, gbc_btnO);
 
-		JButton btnNewButton_4 = new JButton(" Bas ");
-		btnNewButton_4.addActionListener(new ActionListener() {
+		btnS = new JButton(" Bas ");
+		btnS.setVisible(false);
+		btnS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seDeplacer("S");
 			}
 		});
-		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
-		gbc_btnNewButton_4.gridwidth = 3;
-		gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_4.gridx = 31;
-		gbc_btnNewButton_4.gridy = 24;
-		frmVisioscope.getContentPane().add(btnNewButton_4, gbc_btnNewButton_4);
+		GridBagConstraints gbc_btnS = new GridBagConstraints();
+		gbc_btnS.gridwidth = 3;
+		gbc_btnS.insets = new Insets(0, 0, 5, 5);
+		gbc_btnS.gridx = 31;
+		gbc_btnS.gridy = 24;
+		frmVisioscope.getContentPane().add(btnS, gbc_btnS);
 
-		JButton btnNewButton_5 = new JButton("    Droite    ");
-		btnNewButton_5.addActionListener(new ActionListener() {
+		btnE = new JButton("    Droite    ");
+		btnE.setVisible(false);
+		btnE.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seDeplacer("E");
 			}
 		});
-		GridBagConstraints gbc_btnNewButton_5 = new GridBagConstraints();
-		gbc_btnNewButton_5.gridwidth = 3;
-		gbc_btnNewButton_5.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_5.gridx = 34;
-		gbc_btnNewButton_5.gridy = 24;
-		frmVisioscope.getContentPane().add(btnNewButton_5, gbc_btnNewButton_5);
+		GridBagConstraints gbc_btnE = new GridBagConstraints();
+		gbc_btnE.gridwidth = 3;
+		gbc_btnE.insets = new Insets(0, 0, 5, 5);
+		gbc_btnE.gridx = 34;
+		gbc_btnE.gridy = 24;
+		frmVisioscope.getContentPane().add(btnE, gbc_btnE);
+		frmVisioscope.getContentPane().setFocusTraversalPolicy(
+				new FocusTraversalOnArray(new Component[] { separator,
+						lblVisioscope, txtTapezVotreRecherche, lblNewLabel,
+						comboBox, btnOk, txtrBienvenueSurVisioscope,
+						btnPrec, btnSuiv, btnNO, btnN,
+						btnNE, btnO, btnS,
+						btnE }));
 
 	}
 
-	public void affichageImage(URL url) {
-		ImageIcon img = new ImageIcon(url);
+	public void affichageImage() {
+
+		try {
+			// On essaye de transfomer urlString en type URL
+			if (etat == 1) {
+				url1 = new URL(tabPhotosVrac[i].getMediumUrl());
+			}
+			if (etat == 2) {
+				url1 = new URL(
+						tabPhotosOrdonnees[ligne][colonne].getMediumUrl());
+			}
+		} catch (MalformedURLException e1) {
+			System.out.println(e1.getMessage());
+		}
+		ImageIcon img = new ImageIcon(url1);
 		lblNewLabel.setIcon(img);
+		try {
+			if (etat == 1) {
+				positionGeographique = geoInterface
+						.getLocation(tabPhotosVrac[i].getId());
+			}
+			if (etat == 2) {
+				positionGeographique = geoInterface
+						.getLocation(tabPhotosOrdonnees[ligne][colonne].getId());
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			// e1.printStackTrace();
+			System.out.println("yo c'est l'erreur 1");
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			// e1.printStackTrace();
+			System.out.println("yo c'est l'erreur 2");
+		} catch (FlickrException e1) {
+			// TODO Auto-generated catch block
+			// e1.printStackTrace();
+			System.out.println("yo c'est l'erreur 3");
+		}
+		System.out.println(positionGeographique.getLatitude());
+		System.out.println(positionGeographique.getLongitude());
+		// System.out.println("ligne : " + ligne);
+		// System.out.println("colonne : " + colonne);
 	}
 
 	// Fonction qui récupere les photos sur Flickr et qui les mets dans un
 	// tableau
-	public Photo[] recupererPhotosVrac() throws IOException, SAXException,
-			FlickrException {
-		// création d'un élément de type Flickr
-		Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122");
-		// création d'un élément de type PhotoInterface
-		PhotosInterface photosInterface = apiAccess.getPhotosInterface();
-		// creation d'un élément de type GeoInterface
-		geoInterface = apiAccess.getGeoInterface();
-		PhotoList listePhoto1 = new PhotoList();
-		Photo[] tab = new Photo[1];
-
-		// Création d'un paramètre de recherche
-		SearchParameters param = new SearchParameters();
-		String tagDemande = txtTapezVotreRecherche.getText();
-		String[] tabTags = { tagDemande };
-		param.setHasGeo(true);
-		param.setTags(tabTags); // On definit le paramètre avec ce tag
-		param.setBBox("2.292", "48.856", "2.293", "48.857");
-		// param.setMaxUploadDate(new Date(new Long(0)));
-		// param.setMinUploadDate(new Date(System.currentTimeMillis()));
-		// System.out.println(param.getHasGeo());
-
-		try {
-			// Récupération d'uneliste de photos
-			listePhoto1 = photosInterface.search(param, 1, 0);
-		} catch (FlickrException e3) {
-			//System.out.println(e3.getErrorMessage());
-			System.out.println("yo c'est l'erreur 1");
-		} catch (IOException e1) {
-			//System.out.println(e1);
-			System.out.println("yo c'est l'erreur 2");
-		} catch (SAXException e2) {
-			//System.out.println(e2.getMessage());
-			System.out.println("yo c'est l'erreur 3");
-		}
-
-		// ON MET LES PHOTOS DANS UN TABLEAU
-
-		// for (int i = 0; i <= 1; i++) {
-		tab[0] = (Photo) listePhoto1.get(0);
-		// }
-		return tab;
-	}
-
-	public Photo[][] recupererPhotosOrdonnees(int nbPhotos, double longMin, double latMin, double longMax, double latMax) throws IOException,
+	public void recupererPhotosVrac(int nbPhotos) throws IOException,
 			SAXException, FlickrException {
 		// création d'un élément de type Flickr
 		Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122");
@@ -484,7 +471,56 @@ public class FenetreWB {
 		// creation d'un élément de type GeoInterface
 		geoInterface = apiAccess.getGeoInterface();
 		PhotoList listePhoto1 = new PhotoList();
-		Photo[][] tab = new Photo[(int) Math.sqrt(nbPhotos)][(int) Math.sqrt(nbPhotos)];
+		tabPhotosVrac = new Photo[nbPhotos];
+
+		// Création d'un paramètre de recherche
+		SearchParameters param = new SearchParameters();
+		String tagDemande = txtTapezVotreRecherche.getText();
+		String[] tabTags = { tagDemande };
+		param.setHasGeo(true);
+		param.setTags(tabTags); // On definit le paramètre avec ce tag
+		// param.setBBox("2.292", "48.856", "2.293", "48.857");
+
+		try {
+			// Récupération d'uneliste de photos
+			listePhoto1 = photosInterface.search(param, nbPhotos, 0);
+		} catch (FlickrException e3) {
+			// System.out.println(e3.getErrorMessage());
+			System.out.println("yo c'est l'erreur 1");
+		} catch (IOException e1) {
+			// System.out.println(e1);
+			System.out.println("yo c'est l'erreur 2");
+		} catch (SAXException e2) {
+			// System.out.println(e2.getMessage());
+			System.out.println("yo c'est l'erreur 3");
+		}
+		
+		progressBar.setMaximum(nbPhotos);
+		for (int compt1 = 0; compt1 <= nbPhotos - 1; compt1++) {
+			compteur++;
+			progressBar.setValue(compteur);
+			tabPhotosVrac[compt1] = (Photo) listePhoto1.get(compt1);
+			System.out.println(tabPhotosVrac[compt1].getUrl());
+			System.out.println(compt1);
+			System.out.println(compteur);
+		}
+		affichageImage();
+		btnSuiv.setVisible(true);
+		btnPrec.setVisible(true);
+	}
+
+	public void recupererPhotosOrdonnees(int nbPhotos, double longMin,
+			double latMin, double longMax, double latMax) throws IOException,
+			SAXException, FlickrException {
+		// création d'un élément de type Flickr
+		Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122");
+		// création d'un élément de type PhotoInterface
+		PhotosInterface photosInterface = apiAccess.getPhotosInterface();
+		// creation d'un élément de type GeoInterface
+		geoInterface = apiAccess.getGeoInterface();
+		PhotoList listePhoto1 = new PhotoList();
+		this.tabPhotosOrdonnees = new Photo[(int) Math.sqrt(nbPhotos)][(int) Math
+				.sqrt(nbPhotos)];
 
 		// Création d'un paramètre de recherche
 		SearchParameters param = new SearchParameters();
@@ -493,47 +529,45 @@ public class FenetreWB {
 		param.setHasGeo(true);
 		param.setTags(tabTags);
 		// On definit le paramètre avec ce tag
-		double xStep = ((longMax - longMin)/(int) Math.sqrt(nbPhotos));
-		double yStep = ((latMax - latMin)/(int) Math.sqrt(nbPhotos));
+		double xStep = ((longMax - longMin) / (int) Math.sqrt(nbPhotos));
+		double yStep = ((latMax - latMin) / (int) Math.sqrt(nbPhotos));
 		System.out.println(xStep);
 		System.out.println(yStep);
 		Double xMin = longMin;
 		Double yMin = latMin;
 		Double xMax = longMin + xStep;
 		Double yMax = latMin + yStep;
-		//double step = 0.001;
 		int l = 0;
 		int c = 0;
-		for (i = 0; i <= nbPhotos-1; i++) {
+		progressBar.setMaximum(nbPhotos);
+		for (int compt2 = 0; compt2 <= nbPhotos - 1; compt2++) {
 			System.out.println(xMin.toString());
+			compteur++;
+			progressBar.setValue(compteur);
 
-			if (c < (Math.sqrt(nbPhotos)-1)) {
+			if (c < (Math.sqrt(nbPhotos) - 1)) {
 				param.setBBox(xMin.toString(), yMin.toString(),
 						xMax.toString(), yMax.toString());
 				try {
 					// Récupération d'uneliste de photos
-					System.out.println("yo yo yo");
 					listePhoto1 = photosInterface.search(param, 1, 0);
-					
+
 				} catch (FlickrException e3) {
-					//System.out.println(e3.getErrorMessage());
+					// System.out.println(e3.getErrorMessage());
 					System.out.println("yo c'est l'erreur 1");
 				} catch (IOException e1) {
-					//System.out.println(e1);
+					// System.out.println(e1);
 					System.out.println("yo c'est l'erreur 2");
 				} catch (SAXException e2) {
-					//System.out.println(e2.getMessage());
+					// System.out.println(e2.getMessage());
 					System.out.println("yo c'est l'erreur 3");
 				}
-//					tab[l][c] = 
-//				} else {
-				System.out.println("yo yo yo");
-					tab[l][c] = (Photo) listePhoto1.get(0);
-				
+				this.tabPhotosOrdonnees[l][c] = (Photo) listePhoto1.get(0);
+
 				c++;
 				xMin = xMax;
 				xMax = xMax + xStep;
-			} else if (c == (Math.sqrt(nbPhotos)-1)) {
+			} else if (c == (Math.sqrt(nbPhotos) - 1)) {
 				param.setBBox(String.valueOf(xMin), String.valueOf(yMin),
 						String.valueOf(xMax), String.valueOf(yMax));
 				try {
@@ -546,7 +580,7 @@ public class FenetreWB {
 				} catch (SAXException e2) {
 					System.out.println(e2.getMessage());
 				}
-				tab[l][c] = (Photo) listePhoto1.get(0);
+				this.tabPhotosOrdonnees[l][c] = (Photo) listePhoto1.get(0);
 				c = 0;
 				l++;
 				xMin = longMin;
@@ -556,7 +590,6 @@ public class FenetreWB {
 			}
 
 		}
-		return tab;
 	}
 
 	public void seDeplacer(String direction) {
@@ -588,37 +621,44 @@ public class FenetreWB {
 			ligne++;
 			break;
 		}
-		// On récupère l'url de la photo sous forme de string
-		String urlString1 = tabPhotosOrdonnees[ligne][colonne].getMediumUrl();
-		System.out.println(urlString1);
-
-		try {
-			// On essaye de transfomer urlString en type URL
-			url1 = new URL(urlString1);
-		} catch (MalformedURLException e1) {
-			System.out.println(e1.getMessage());
-		}
-
-		affichageImage(url1);
-		try {
-			positionGeographique = geoInterface
-					.getLocation(tabPhotosOrdonnees[ligne][colonne].getId());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			//e1.printStackTrace();
-			System.out.println("yo c'est l'erreur 1");
-		} catch (SAXException e1) {
-			// TODO Auto-generated catch block
-			//e1.printStackTrace();
-			System.out.println("yo c'est l'erreur 2");
-		} catch (FlickrException e1) {
-			// TODO Auto-generated catch block
-			//e1.printStackTrace();
-			System.out.println("yo c'est l'erreur 3");
-		}
-		System.out.println(positionGeographique.getLatitude());
-		System.out.println(positionGeographique.getLongitude());
-		System.out.println("ligne : " + ligne);
-		System.out.println("colonne : " + colonne);
+		affichageImage();
 	}
+}
+
+class MonThread extends Thread {
+
+	private FenetreWB fenetre;
+	private int nbPhotos;
+
+	public MonThread(FenetreWB f, int nbP) {
+		fenetre = f;
+		nbPhotos = nbP;
+	}
+
+	public void run() {
+		// on récupère le texte tapé par l'utilisateur
+		// String tagDemande = txtTapezVotreRecherche.getText();
+		try {
+			if (fenetre.etat == 2) {
+				fenetre.recupererPhotosOrdonnees(nbPhotos, 78.040674, 27.171792,
+						78.043635, 27.174541);
+				//fenetre.recupererPhotosOrdonnees(16, 2.294, 48.853, 2.297,
+				//48.858);
+			}
+			if (fenetre.etat == 1) {
+				fenetre.recupererPhotosVrac(nbPhotos);
+			}
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (SAXException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (FlickrException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		fenetre.compteur = 0;
+	}
+
 }
