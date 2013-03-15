@@ -2,6 +2,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
@@ -17,295 +18,331 @@ import java.net.URL;
 public class FenetrePropre extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	public JTextField txtTapezVotreRecherche;
-	public JLabel lblPhotoCentrale;
-	public JButton btnPrecedent;
-	public JButton btnOk;
-	public JButton btnO;
-	public JButton btnS;
-	public JButton btnE;
-	public JButton btnN;
-	public JButton btnSo;
-	public JButton btnSe;
-	public JButton btnNo;
-	public JButton btnNe;
-	public JButton btnSuivant;
-	public JButton button1;
-	public JButton button2;
-	public JButton button3;
-	public JButton button4;
-	public JButton button5;
-	public JComboBox<String> comboBox;
+	public JTextField txtTapezVotreRecherche = new JTextField();
+	JLabel lblTitre = new JLabel("VisioScope");
+	public JLabel lblPhotoCentrale = new JLabel("");
+	JTextArea txtrBienvenueSurVisioscope = new JTextArea();
+	public JButton btnPrecedent = new JButton("Precedent");
+	public JButton btnOk  = new JButton("Ok");
+	public JButton btnO = new JButton("O");
+	public JButton btnS = new JButton("S");
+	public JButton btnE = new JButton("E");
+	public JButton btnN = new JButton("N");
+	public JButton btnSo = new JButton("SO");
+	public JButton btnSe = new JButton("SE");
+	public JButton btnNo = new JButton("NO");
+	public JButton btnNe = new JButton("NE");
+	public JButton btnSuivant = new JButton("Suivant");
+	public JButton button1 = new JButton("1");
+	public JButton button2 = new JButton("2");
+	public JButton button3 = new JButton("3");
+	public JButton button4 = new JButton("4");
+	public JButton button5 = new JButton("5");
+	public JButton btnQuitter = new JButton("Quitter");
+	public JButton btnIn = new JButton("In");
+	public JButton btnOut = new JButton("Out");;
+	public JButton btnBilk = new JButton("Bilk");
 	public URL url1; // url de la photo
 	private ThreadRecup thread;
-	public JProgressBar progressBar;
+	public Integer[] tabNbOrdonne = {4, 9, 16, 25, 36, 49, 64, 81};
+	public Integer[] tabNbBilk = {10, 20, 30, 40, 50, 60, 70, 80, 2000};
+	public JComboBox<Integer> choixNbBilk = new JComboBox(tabNbBilk);
+	public JComboBox<Integer> choixNbOrdonne = new JComboBox(tabNbOrdonne);
+	public JProgressBar progressBar = new JProgressBar();
 	int compteur = 0;
 	static PhotosInterface photosInterface;
 	public Visit visit1;
 
 	public FenetrePropre() {
 		setTitle("VisioScope");
+		setVisible(true);
+		setSize(1300, 800);
 		setResizable(false);
 		getContentPane().setLayout(null);
 		getContentPane().setBackground(Color.DARK_GRAY);
 		getContentPane().setForeground(Color.GRAY);
 
-		JLabel lblTitre = new JLabel("VisioScope");
 		lblTitre.setBounds(530, 24, 152, 59);
-		getContentPane().add(lblTitre);
 		lblTitre.setForeground(Color.GRAY);
 		lblTitre.setFont(new Font("Arial", Font.BOLD, 28));
+		getContentPane().add(lblTitre);
+		
+		choixNbBilk.setBounds(23, 240, 40, 20);
+		getContentPane().add(choixNbBilk);
+		
+		choixNbOrdonne.setBounds(80, 240, 40, 20);
+		getContentPane().add(choixNbOrdonne);
 
-		txtTapezVotreRecherche = new JTextField();
-		txtTapezVotreRecherche.setBounds(23, 147, 100, 20);
-		getContentPane().add(txtTapezVotreRecherche);
+		txtTapezVotreRecherche.setBounds(23, 147, 131, 20);
 		txtTapezVotreRecherche.setColumns(10);
+		getContentPane().add(txtTapezVotreRecherche);
 
-		JTextArea txtrBienvenueSurVisioscope = new JTextArea();
 		txtrBienvenueSurVisioscope
 				.setText("Bienvenue sur VisioScope, \nune application vous\npermettant d'effectuer\ndes visites virtuelles\nde n'importe quel site\ntouristique, archéologique\nou bien de monuments.\nEt ce n'importe où sur la\nTerre!\nCommencez par taper votre\nrecherche ci-dessus,\nchoisissez quel type de visite\nvous souhaitez effectuer et\ncliquez enfin sur le bouton \n\"Ok!");
 		txtrBienvenueSurVisioscope.setBounds(23, 348, 249, 285);
 		txtrBienvenueSurVisioscope.setBackground(Color.DARK_GRAY);
-		getContentPane().add(txtrBienvenueSurVisioscope);
 		txtrBienvenueSurVisioscope.setForeground(Color.GRAY);
+		getContentPane().add(txtrBienvenueSurVisioscope);
 
-		comboBox = new JComboBox<String>();
-		comboBox.setBounds(23, 190, 100, 20);
-		getContentPane().add(comboBox);
-		comboBox.addItem("Visite intérieure");
-		comboBox.addItem("Visite extérieure");
-		comboBox.addItem("Photos aléatoires");
-
-		lblPhotoCentrale = new JLabel("");
 		lblPhotoCentrale.setBounds(478, 168, 644, 435);
-		lblPhotoCentrale
-				.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		lblPhotoCentrale
-				.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+		lblPhotoCentrale.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		lblPhotoCentrale.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
 		getContentPane().add(lblPhotoCentrale);
 
-		btnPrecedent = new JButton("Precedent");
 		btnPrecedent.setBounds(309, 365, 89, 31);
-		getContentPane().add(btnPrecedent);
 		btnPrecedent.setVisible(false);
 		btnPrecedent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("prec", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnPrecedent);
 
-		btnSo = new JButton("SO");
 		btnSo.setBounds(333, 566, 135, 122);
-		getContentPane().add(btnSo);
 		btnSo.setVisible(false);
 		btnSo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("SO", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnSo);
 
-		btnNo = new JButton("NO");
 		btnNo.setBounds(333, 88, 135, 122);
-		getContentPane().add(btnNo);
 		btnNo.setVisible(false);
 		btnNo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("NO", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnNo);
 
-		btnNe = new JButton("NE");
 		btnNe.setBounds(1132, 88, 121, 122);
-		getContentPane().add(btnNe);
 		btnNe.setVisible(false);
 		btnNe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("NE", FenetrePropre.this);
 			}
 		});
-
-		btnS = new JButton("S");
+		getContentPane().add(btnNe);
+		
 		btnS.setBounds(760, 614, 121, 122);
-		getContentPane().add(btnS);
 		btnS.setVisible(false);
 		btnS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("S", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnS);
 
-		btnSe = new JButton("SE");
 		btnSe.setBounds(1132, 566, 121, 122);
-		getContentPane().add(btnSe);
+		
 		btnSe.setVisible(false);
 		btnSe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("SE", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnSe);
 
-		btnE = new JButton("E");
 		btnE.setBounds(1132, 318, 121, 125);
-		getContentPane().add(btnE);
 		btnE.setVisible(false);
 		btnE.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("E", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnE);
 
-		btnSuivant = new JButton("Suivant");
 		btnSuivant.setBounds(1185, 365, 89, 31);
-		getContentPane().add(btnSuivant);
 		btnSuivant.setVisible(false);
 		btnSuivant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("suiv", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnSuivant);
 
-		btnN = new JButton("N");
 		btnN.setBounds(760, 35, 135, 122);
-		getContentPane().add(btnN);
+
 		btnN.setVisible(false);
 		btnN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("N", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnN);
 
-		btnO = new JButton("O");
 		btnO.setBounds(333, 318, 135, 125);
-		getContentPane().add(btnO);
 		btnO.setVisible(false);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("O", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(btnO);
 
-		button3 = new JButton("3");
 		button3.setBounds(770, 670, 89, 81);
-		getContentPane().add(button3);
 		button3.setVisible(false);
+		getContentPane().add(button3);
 
-		button2 = new JButton("2");
 		button2.setBounds(661, 670, 89, 81);
-		getContentPane().add(button2);
 		button2.setVisible(false);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("prec", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(button2);
 
-		button4 = new JButton("4");
 		button4.setBounds(908, 670, 89, 81);
-		getContentPane().add(button4);
 		button4.setVisible(false);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("suiv", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(button4);
 
-		button5 = new JButton("5");
 		button5.setBounds(1026, 670, 89, 81);
-		getContentPane().add(button5);
 		button5.setVisible(false);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("2suiv", FenetrePropre.this);
 			}
 		});
+		getContentPane().add(button5);
 
-		button1 = new JButton("1");
 		button1.setBounds(530, 670, 89, 81);
-		getContentPane().add(button1);
 		button1.setVisible(false);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				visit1.move("2prec", FenetrePropre.this);
 			}
 		});
-
-		JButton btnQuitter = new JButton("Quitter");
+		getContentPane().add(button1);
+		
+		btnQuitter.setBounds(1164, 699, 89, 23);
+		btnQuitter.setVisible(false);
 		btnQuitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				btnSuivant.setVisible(false);
+				btnPrecedent.setVisible(false);
+				btnN.setVisible(false);
+				btnNe.setVisible(false);
+				btnNo.setVisible(false);
+				btnS.setVisible(false);
+				btnSe.setVisible(false);
+				btnSo.setVisible(false);
+				btnE.setVisible(false);
+				btnO.setVisible(false);
+				button1.setVisible(false);
+				button2.setVisible(false);
+				button3.setVisible(false);
+				button4.setVisible(false);
+				button5.setVisible(false);
+				btnQuitter.setVisible(false);
+				btnOk.setVisible(true);
+				btnBilk.setVisible(false);
+				btnIn.setVisible(false);
+				btnOut.setVisible(false);
+				choixNbBilk.setVisible(true);
+				choixNbOrdonne.setVisible(true);
+				lblPhotoCentrale.setVisible(false);
 			}
 		});
-		btnQuitter.setBounds(1164, 699, 89, 23);
 		getContentPane().add(btnQuitter);
-		btnQuitter.setVisible(false);
 
-		progressBar = new JProgressBar();
-		progressBar.setBounds(35, 80, 146, 14);
+		progressBar.setBounds(749, 365, 146, 14);
+		progressBar.setVisible(false);
+		progressBar.setStringPainted(true);
 		getContentPane().add(progressBar);
 
-		btnOk = new JButton("Ok");
-		btnOk.setBounds(154, 146, 89, 23);
-		getContentPane().add(btnOk);
-		setSize(1300, 800);
+		btnBilk.setBounds(23, 178, 52, 23);
+		btnBilk.setVisible(false);
+		btnBilk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (progressBar.getValue() != progressBar.getMaximum()) {
+					progressBar.setBounds(23, 240, 146, 14);
+				}
+				visit1.setVisitState(0);
+				btnSuivant.setVisible(true);
+				btnPrecedent.setVisible(true);
+				btnN.setVisible(false);
+				btnNe.setVisible(false);
+				btnNo.setVisible(false);
+				btnS.setVisible(false);
+				btnSe.setVisible(false);
+				btnSo.setVisible(false);
+				btnE.setVisible(false);
+				btnO.setVisible(false);
+				btnQuitter.setVisible(true);
+				visit1.move("init", FenetrePropre.this);
+			}
+		});
+		getContentPane().add(btnBilk);
+
+		btnIn.setBounds(92, 178, 52, 23);
+		btnIn.setVisible(false);
+		btnIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				visit1.setVisitState(1);
+				btnS.setVisible(true);
+				btnE.setVisible(true);
+				btnSe.setVisible(true);
+				btnSuivant.setVisible(false);
+				btnPrecedent.setVisible(false);
+				button1.setVisible(false);
+				button2.setVisible(false);
+				button3.setVisible(false);
+				button4.setVisible(false);
+				button5.setVisible(false);
+				btnQuitter.setVisible(true);
+				visit1.move("init", FenetrePropre.this);
+			}
+		});
+		getContentPane().add(btnIn);
+
+		btnOut.setBounds(164, 178, 52, 23);
+		btnOut.setVisible(false);
+		btnOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				visit1.setVisitState(1);
+				btnS.setVisible(true);
+				btnE.setVisible(true);
+				btnSe.setVisible(true);
+				btnSuivant.setVisible(false);
+				btnPrecedent.setVisible(false);
+				visit1.move("init", FenetrePropre.this);
+			}
+		});
+		getContentPane().add(btnOut);
+
+		btnOk.setBounds(164, 146, 52, 23);
 		btnOk.setVisible(true);
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (comboBox.getSelectedIndex() == 2) {
-					visit1 = new Visit(txtTapezVotreRecherche.getText());
-					visit1.setVisitState(1);
-					thread = new ThreadRecup(10, FenetrePropre.this);
-					thread.start();
-					try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					btnSuivant.setVisible(true);
-					btnPrecedent.setVisible(true);
-					btnN.setVisible(false);
-					btnNe.setVisible(false);
-					btnNo.setVisible(false);
-					btnS.setVisible(false);
-					btnSe.setVisible(false);
-					btnSo.setVisible(false);
-					btnE.setVisible(false);
-					btnO.setVisible(false);
-					visit1.move("init", FenetrePropre.this);
-				}
-				if (comboBox.getSelectedIndex() == 0) {
-					visit1 = new Visit(txtTapezVotreRecherche.getText());
-					visit1.setVisitState(2);
-					thread = new ThreadRecup(81, FenetrePropre.this);
-					thread.start();
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					btnS.setVisible(true);
-					btnE.setVisible(true);
-					btnSe.setVisible(true);
-					btnSuivant.setVisible(false);
-					btnPrecedent.setVisible(false);
-					visit1.move("init", FenetrePropre.this);
-				}
+				progressBar.setVisible(true);
+				btnOk.setVisible(false);
+				choixNbBilk.setVisible(false);
+				choixNbOrdonne.setVisible(false);
+				visit1 = new Visit(txtTapezVotreRecherche.getText());
+				thread = new ThreadRecup((Integer) choixNbOrdonne.getSelectedItem(),(Integer) choixNbBilk.getSelectedItem(), FenetrePropre.this);
+				thread.start();
 			}
 		});
+		getContentPane().add(btnOk);
 
-		setVisible(true);
+		
 	}
 
 	public void affichageImage() {
 
 		try {
 			// On essaye de transfomer urlString en type URL
-			if (visit1.getVisitState() == 1) {
+			if (visit1.getVisitState() == 0) {
 				url1 = new URL(visit1.tabBilk[visit1.i].getMediumUrl());
-			} else if (visit1.getVisitState() == 2) {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne][visit1.colonne]
-								.getMediumUrl());
+			} else if (visit1.getVisitState() == 1) {
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne].getMediumUrl());
 			}
 		} catch (MalformedURLException e1) {
 			System.out.println(e1.getMessage());
@@ -314,9 +351,7 @@ public class FenetrePropre extends JFrame {
 		lblPhotoCentrale.setIcon(img);
 		if (btnSe.isVisible()) {
 			try {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne + 1]
-								.getSmallUrl());
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne + 1].getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -326,9 +361,7 @@ public class FenetrePropre extends JFrame {
 
 		if (btnS.isVisible()) {
 			try {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne]
-								.getSmallUrl());
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne].getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -338,9 +371,7 @@ public class FenetrePropre extends JFrame {
 
 		if (btnSo.isVisible()) {
 			try {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne - 1]
-								.getSmallUrl());
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne - 1].getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -350,9 +381,7 @@ public class FenetrePropre extends JFrame {
 
 		if (btnO.isVisible()) {
 			try {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne][visit1.colonne - 1]
-								.getSmallUrl());
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne - 1].getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -362,9 +391,7 @@ public class FenetrePropre extends JFrame {
 
 		if (btnNo.isVisible()) {
 			try {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne - 1]
-								.getSmallUrl());
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne - 1].getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -374,9 +401,7 @@ public class FenetrePropre extends JFrame {
 
 		if (btnN.isVisible()) {
 			try {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne]
-								.getSmallUrl());
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne].getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -386,9 +411,7 @@ public class FenetrePropre extends JFrame {
 
 		if (btnNe.isVisible()) {
 			try {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne + 1]
-								.getSmallUrl());
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne + 1].getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -398,9 +421,7 @@ public class FenetrePropre extends JFrame {
 
 		if (btnE.isVisible()) {
 			try {
-				url1 = new URL(
-						visit1.tabOrdonne[visit1.ligne][visit1.colonne + 1]
-								.getSmallUrl());
+				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne + 1].getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}

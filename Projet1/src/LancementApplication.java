@@ -14,7 +14,7 @@ public class LancementApplication {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				System.out.println("yo Propre");
+				System.out.println("yo Propre ta mere");
 			}
 		});
 	}

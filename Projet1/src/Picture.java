@@ -8,18 +8,16 @@ import com.aetrion.flickr.photos.geo.GeoInterface;
 
 
 public class Picture {
-	public String largeUrl;
-	public String mediumUrl;
-	public String smallUrl;
-	float longitudeP;
-	float latitudeP;
-	Integer inOut;
-	String tagP;
-	Date dateP = new Date();
-	GeoData positionGeographique;
-	
-	Picture() {
-	}
+	private String largeUrl;
+	private String mediumUrl;
+	private String smallUrl;
+	private float longitudeP;
+	private float latitudeP;
+	private Integer inOut;
+	private String tagP;
+	private Date dateP = new Date();
+	private GeoData positionGeographique;
+
 	
 	Picture(Photo p, GeoInterface geo, String tag) throws IOException, SAXException, FlickrException{
 		mediumUrl = p.getMediumUrl();
