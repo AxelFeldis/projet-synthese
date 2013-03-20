@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 
 public class FenetrePropre extends JFrame {
 
@@ -52,6 +53,7 @@ public class FenetrePropre extends JFrame {
 	int compteur = 0;
 	static PhotosInterface photosInterface;
 	public Visit visit1;
+	public Site site=new Site() ;
 
 	public FenetrePropre() {
 		setTitle("VisioScope");
@@ -321,6 +323,12 @@ public class FenetrePropre extends JFrame {
 		btnOk.setVisible(true);
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {										//
+					site.retrieveGeoSite();					//
+				} catch (SQLException e1) {					////// On appelle la méthode retrieveGeoSite() qui fait 
+					// TODO Auto-generated catch block		////// la recherche dans la BDD du nom de site choisi
+					e1.printStackTrace();					//
+				}											//
 				progressBar.setVisible(true);
 				btnOk.setVisible(false);
 				choixNbBilk.setVisible(false);
