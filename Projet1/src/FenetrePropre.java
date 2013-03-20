@@ -60,7 +60,7 @@ public class FenetrePropre extends JFrame {
 	Site site;
 
 	public FenetrePropre() throws SQLException {
-		site = new Site(comboBox);
+		site = new Site();
 		setTitle("VisioScope");
 		setVisible(true);
 		setSize(1300, 800);
@@ -331,7 +331,10 @@ public class FenetrePropre extends JFrame {
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try { //
-					site.retrieveGeoSite(); //
+					String st = comboBox.getSelectedItem().toString();
+					site.retrieveGeoSite(st);
+					System.out.println(site.getLongitudeS());
+					System.out.println(site.getLatitudeS());
 				} catch (SQLException e1) { // //// On appelle la méthode
 											// retrieveGeoSite() qui fait
 					// TODO Auto-generated catch block ////// la recherche dans
