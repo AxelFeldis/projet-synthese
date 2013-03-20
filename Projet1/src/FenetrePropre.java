@@ -14,7 +14,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class FenetrePropre extends JFrame {
 
@@ -24,7 +27,7 @@ public class FenetrePropre extends JFrame {
 	public JLabel lblPhotoCentrale = new JLabel("");
 	JTextArea txtrBienvenueSurVisioscope = new JTextArea();
 	public JButton btnPrecedent = new JButton("Precedent");
-	public JButton btnOk  = new JButton("Ok");
+	public JButton btnOk = new JButton("Ok");
 	public JButton btnO = new JButton("O");
 	public JButton btnS = new JButton("S");
 	public JButton btnE = new JButton("E");
@@ -45,17 +48,19 @@ public class FenetrePropre extends JFrame {
 	public JButton btnBilk = new JButton("Bilk");
 	public URL url1; // url de la photo
 	private ThreadRecup thread;
-	public Integer[] tabNbOrdonne = {4, 9, 16, 25, 36, 49, 64, 81};
-	public Integer[] tabNbBilk = {10, 20, 30, 40, 50, 60, 70, 80, 2000};
+	public Integer[] tabNbOrdonne = { 4, 9, 16, 25, 36, 49, 64, 81 };
+	public Integer[] tabNbBilk = { 10, 20, 30, 40, 50, 60, 70, 80, 2000 };
 	public JComboBox<Integer> choixNbBilk = new JComboBox(tabNbBilk);
 	public JComboBox<Integer> choixNbOrdonne = new JComboBox(tabNbOrdonne);
+	public JComboBox<String> comboBox = new JComboBox();
 	public JProgressBar progressBar = new JProgressBar();
 	int compteur = 0;
 	static PhotosInterface photosInterface;
 	public Visit visit1;
-	public Site site=new Site() ;
+	Site site;
 
-	public FenetrePropre() {
+	public FenetrePropre() throws SQLException {
+		site = new Site(comboBox);
 		setTitle("VisioScope");
 		setVisible(true);
 		setSize(1300, 800);
@@ -68,11 +73,11 @@ public class FenetrePropre extends JFrame {
 		lblTitre.setForeground(Color.GRAY);
 		lblTitre.setFont(new Font("Arial", Font.BOLD, 28));
 		getContentPane().add(lblTitre);
-		
-		choixNbBilk.setBounds(23, 240, 40, 20);
+
+		choixNbBilk.setBounds(23, 240, 68, 20);
 		getContentPane().add(choixNbBilk);
-		
-		choixNbOrdonne.setBounds(80, 240, 40, 20);
+
+		choixNbOrdonne.setBounds(103, 240, 68, 20);
 		getContentPane().add(choixNbOrdonne);
 
 		txtTapezVotreRecherche.setBounds(23, 147, 131, 20);
@@ -87,8 +92,10 @@ public class FenetrePropre extends JFrame {
 		getContentPane().add(txtrBienvenueSurVisioscope);
 
 		lblPhotoCentrale.setBounds(478, 168, 644, 435);
-		lblPhotoCentrale.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		lblPhotoCentrale.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+		lblPhotoCentrale
+				.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		lblPhotoCentrale
+				.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
 		getContentPane().add(lblPhotoCentrale);
 
 		btnPrecedent.setBounds(309, 365, 89, 31);
@@ -126,7 +133,7 @@ public class FenetrePropre extends JFrame {
 			}
 		});
 		getContentPane().add(btnNe);
-		
+
 		btnS.setBounds(760, 614, 121, 122);
 		btnS.setVisible(false);
 		btnS.addActionListener(new ActionListener() {
@@ -137,7 +144,7 @@ public class FenetrePropre extends JFrame {
 		getContentPane().add(btnS);
 
 		btnSe.setBounds(1132, 566, 121, 122);
-		
+
 		btnSe.setVisible(false);
 		btnSe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -222,7 +229,7 @@ public class FenetrePropre extends JFrame {
 			}
 		});
 		getContentPane().add(button1);
-		
+
 		btnQuitter.setBounds(1164, 699, 89, 23);
 		btnQuitter.setVisible(false);
 		btnQuitter.addActionListener(new ActionListener() {
@@ -323,24 +330,55 @@ public class FenetrePropre extends JFrame {
 		btnOk.setVisible(true);
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {										//
-					site.retrieveGeoSite();					//
-				} catch (SQLException e1) {					////// On appelle la méthode retrieveGeoSite() qui fait 
-					// TODO Auto-generated catch block		////// la recherche dans la BDD du nom de site choisi
-					e1.printStackTrace();					//
-				}											//
+				try { //
+					site.retrieveGeoSite(); //
+				} catch (SQLException e1) { // //// On appelle la méthode
+											// retrieveGeoSite() qui fait
+					// TODO Auto-generated catch block ////// la recherche dans
+					// la BDD du nom de site choisi
+					e1.printStackTrace(); //
+				} //
 				progressBar.setVisible(true);
 				btnOk.setVisible(false);
 				choixNbBilk.setVisible(false);
 				choixNbOrdonne.setVisible(false);
 				visit1 = new Visit(txtTapezVotreRecherche.getText());
-				thread = new ThreadRecup((Integer) choixNbOrdonne.getSelectedItem(),(Integer) choixNbBilk.getSelectedItem(), FenetrePropre.this);
+				thread = new ThreadRecup((Integer) choixNbOrdonne
+						.getSelectedItem(), (Integer) choixNbBilk
+						.getSelectedItem(), FenetrePropre.this);
 				thread.start();
 			}
 		});
 		getContentPane().add(btnOk);
 
-		
+		comboBox = new JComboBox<String>();
+		comboBox.setBounds(23, 56, 193, 27);
+		this.fillComboBox();
+		getContentPane().add(comboBox);
+	}
+	
+	public void fillComboBox() throws SQLException{
+		// Remplissage de la comboBox
+
+				// Création d'un objet Statement
+				Statement state = site.getConnection().createStatement();
+				// L'objet ResultSet contient le résultat de la requête SQL
+				ResultSet result = state.executeQuery("SELECT nom FROM \"Site\";");
+				// On récupère les MetaData
+				ResultSetMetaData resultMeta = result.getMetaData();
+				// On affiche le nom des colonnes
+
+				while (result.next()) {
+					for (int i = 1; i <= resultMeta.getColumnCount(); i++) {
+						String s = result.getObject(i).toString();
+						System.out.println(s);
+						comboBox.addItem(s);
+					}
+
+				}
+				System.out.println(comboBox.getItemCount());
+				result.close();
+				state.close();
 	}
 
 	public void affichageImage() {
@@ -350,7 +388,9 @@ public class FenetrePropre extends JFrame {
 			if (visit1.getVisitState() == 0) {
 				url1 = new URL(visit1.tabBilk[visit1.i].getMediumUrl());
 			} else if (visit1.getVisitState() == 1) {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne].getMediumUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne][visit1.colonne]
+								.getMediumUrl());
 			}
 		} catch (MalformedURLException e1) {
 			System.out.println(e1.getMessage());
@@ -359,7 +399,9 @@ public class FenetrePropre extends JFrame {
 		lblPhotoCentrale.setIcon(img);
 		if (btnSe.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne + 1].getSmallUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne + 1]
+								.getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -369,7 +411,9 @@ public class FenetrePropre extends JFrame {
 
 		if (btnS.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne].getSmallUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne]
+								.getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -379,7 +423,9 @@ public class FenetrePropre extends JFrame {
 
 		if (btnSo.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne - 1].getSmallUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne - 1]
+								.getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -389,7 +435,9 @@ public class FenetrePropre extends JFrame {
 
 		if (btnO.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne - 1].getSmallUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne][visit1.colonne - 1]
+								.getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -399,7 +447,9 @@ public class FenetrePropre extends JFrame {
 
 		if (btnNo.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne - 1].getSmallUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne - 1]
+								.getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -409,7 +459,9 @@ public class FenetrePropre extends JFrame {
 
 		if (btnN.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne].getSmallUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne]
+								.getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -419,7 +471,9 @@ public class FenetrePropre extends JFrame {
 
 		if (btnNe.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne + 1].getSmallUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne + 1]
+								.getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -429,7 +483,9 @@ public class FenetrePropre extends JFrame {
 
 		if (btnE.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne + 1].getSmallUrl());
+				url1 = new URL(
+						visit1.tabOrdonne[visit1.ligne][visit1.colonne + 1]
+								.getSmallUrl());
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
