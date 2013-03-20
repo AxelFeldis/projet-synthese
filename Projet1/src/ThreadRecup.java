@@ -1,9 +1,4 @@
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
 
 import org.xml.sax.SAXException;
 
@@ -24,11 +19,10 @@ class ThreadRecup extends Thread {
 	public void run() {
 		// on récupère le texte tapé par l'utilisateur
 		// String tagDemande = txtTapezVotreRecherche.getText();
-		// fenetre.progressBar.setMaximum(nbPhotosOrdonne + nbPhotosBilk);
+		//fenetre.progressBar.setMaximum(nbPhotosOrdonne + nbPhotosBilk);
 		try {
 			fenetre.visit1.recupererPhotosVrac(nbPhotosBilk, fenetre);
-			fenetre.visit1.retrievePictureOrdonnees(nbPhotosOrdonne, 78.040674,
-					27.171792, 78.043635, 27.174541, fenetre);
+			fenetre.visit1.retrievePictureOrdonnees(nbPhotosOrdonne, 78.040674, 27.171792, 78.043635, 27.174541, fenetre);
 			// fenetre.recupererPhotosOrdonnees(16, 2.294, 48.853,2.297,48.858);
 		} catch (IOException e2) {
 			// TODO Auto-generated catch block
@@ -41,4 +35,5 @@ class ThreadRecup extends Thread {
 			e2.printStackTrace();
 		}
 	}
+
 }
