@@ -8,13 +8,13 @@ import com.aetrion.flickr.photos.geo.GeoInterface;
 
 
 public class Picture {
-	private String largeUrl;
-	private String mediumUrl;
-	private String smallUrl;
-	private float longitudeP;
-	private float latitudeP;
+	private String largeUrl = "http://ec.comps.canstockphoto.com/can-stock-photo_csp2974897.jpg";
+	private String mediumUrl = "http://ec.comps.canstockphoto.com/can-stock-photo_csp2974897.jpg";
+	private String smallUrl = "http://ec.comps.canstockphoto.com/can-stock-photo_csp2974897.jpg";
+	private float longitudeP = 0;
+	private float latitudeP = 0;
 	private Integer inOut;
-	private String tagP;
+	private String tagP = "Pas de Photos";
 	private Date dateP = new Date();
 	private GeoData positionGeographique;
 
@@ -30,13 +30,7 @@ public class Picture {
 
 	}
 	
-	Picture(String url){
-		mediumUrl = url;
-		largeUrl = url;
-		smallUrl = url;
-		longitudeP = 0;
-		latitudeP = 0;
-		tagP = "Pas de Photo";
+	Picture(){
 	}
 	
 	public String getTag(){
