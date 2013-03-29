@@ -1,8 +1,6 @@
 import java.awt.EventQueue;
 
-
 public class LancementApplication {
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -12,6 +10,7 @@ public class LancementApplication {
 					e.printStackTrace();
 				}
 				System.out.println("Ca marche!");
+				System.out.println("Fenetre ouverte");
 			}
 		});
 	}
