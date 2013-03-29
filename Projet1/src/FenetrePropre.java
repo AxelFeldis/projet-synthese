@@ -7,6 +7,9 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import com.aetrion.flickr.photos.PhotosInterface;
 import java.awt.Color;
 import java.awt.Font;
@@ -54,6 +57,7 @@ public class FenetrePropre extends JFrame {
 	public Visit visit1;
 
 	public FenetrePropre() {
+		
 		setTitle("VisioScope");
 		setVisible(true);
 		setSize(1300, 800);
