@@ -3,9 +3,6 @@ import java.awt.EventQueue;
 
 public class LancementApplication {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -14,7 +11,7 @@ public class LancementApplication {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				System.out.println("yo Propre ta mere");
+				System.out.println("Ca marche!");
 			}
 		});
 	}

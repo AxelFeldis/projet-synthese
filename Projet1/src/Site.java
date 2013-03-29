@@ -1,8 +1,8 @@
 
 public class Site {
-	String nameS;
-	float longitudeS;
-	float latitudeS;
+	private String nameS;
+	private float longitudeS;
+	private float latitudeS;
 	
 	Site(String n, float lo, float la){
 		nameS = new String(n);

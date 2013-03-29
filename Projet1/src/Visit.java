@@ -11,19 +11,19 @@ import com.aetrion.flickr.photos.SearchParameters;
 import com.aetrion.flickr.photos.geo.GeoInterface;
 
 public class Visit {
-	Integer idVisit;
-	Integer visitState; // 0 pour bilk , 1 pour ordonnee
-	String nameV;
-	Date dateV;
-	Picture[] tabBilk;
+	private Integer idVisit;
+	private Integer visitState; // 0 pour bilk , 1 pour ordonnee
+	private String nameV;
+	private Date dateV;
+	PairOfPictures[] tabBilk;
 	// Picture[][] tabInDoor;
 	// Picture[][] tabOutDoor;
-	Picture[][] tabOrdonne;
+	PairOfPictures[][] tabOrdonne;
 	int colonne = 0;
 	int ligne = 0;
 	int i = 0;
-	Picture photoPasDePhoto = new Picture("http://ec.comps.canstockphoto.com/can-stock-photo_csp2974897.jpg");
-	public GeoData positionGeographique;
+	Picture photoPasDePhoto = new Picture();
+	//public GeoData positionGeographique;
 	public static GeoInterface geoInterface;
 	static PhotosInterface photosInterface;
 	static PhotoList listePhoto1;
@@ -108,144 +108,6 @@ public class Visit {
 			}
 		}
 
-		// System.out.println(ligne);
-		// System.out.println(colonne);
-		if (visitState == 1) {
-			if ((colonne == 0) && (ligne == tabOrdonne.length - 1)) {
-				f.btnSo.setVisible(false);
-				f.btnO.setVisible(false);
-				f.btnNo.setVisible(false);
-				f.btnN.setVisible(true);
-				f.btnNe.setVisible(true);
-				f.btnE.setVisible(true);
-				f.btnSe.setVisible(false);
-				f.btnS.setVisible(false);
-			} else if ((colonne == tabOrdonne.length - 1) && (ligne == 0)) {
-				f.btnSe.setVisible(false);
-				f.btnE.setVisible(false);
-				f.btnNe.setVisible(false);
-				f.btnN.setVisible(false);
-				f.btnNo.setVisible(false);
-				f.btnO.setVisible(true);
-				f.btnSo.setVisible(true);
-				f.btnS.setVisible(true);
-
-			} else if ((colonne == 0) && (ligne == 0)) {
-				f.btnSo.setVisible(false);
-				f.btnO.setVisible(false);
-				f.btnNo.setVisible(false);
-				f.btnN.setVisible(false);
-				f.btnNe.setVisible(false);
-				f.btnE.setVisible(true);
-				f.btnSe.setVisible(true);
-				f.btnS.setVisible(true);
-			} else if ((colonne == (tabOrdonne.length - 1)) && (ligne == (tabOrdonne.length - 1))) {
-				f.btnSe.setVisible(false);
-				f.btnE.setVisible(false);
-				f.btnNe.setVisible(false);
-				f.btnN.setVisible(true);
-				f.btnNo.setVisible(true);
-				f.btnO.setVisible(true);
-				f.btnSo.setVisible(false);
-				f.btnS.setVisible(false);
-
-			} else if (colonne == 0) {
-				f.btnSo.setVisible(false);
-				f.btnO.setVisible(false);
-				f.btnNo.setVisible(false);
-				f.btnN.setVisible(true);
-				f.btnNe.setVisible(true);
-				f.btnE.setVisible(true);
-				f.btnSe.setVisible(true);
-				f.btnS.setVisible(true);
-			}
-
-			else if (colonne == (tabOrdonne.length - 1)) {
-				f.btnSe.setVisible(false);
-				f.btnE.setVisible(false);
-				f.btnNe.setVisible(false);
-				f.btnN.setVisible(true);
-				f.btnNo.setVisible(true);
-				f.btnO.setVisible(true);
-				f.btnSo.setVisible(true);
-				f.btnS.setVisible(true);
-			} else if (ligne == 0) {
-				f.btnNe.setVisible(false);
-				f.btnN.setVisible(false);
-				f.btnNo.setVisible(false);
-				f.btnO.setVisible(true);
-				f.btnSo.setVisible(true);
-				f.btnS.setVisible(true);
-				f.btnSe.setVisible(true);
-				f.btnE.setVisible(true);
-			} else if (ligne == (tabOrdonne.length - 1)) {
-				f.btnSe.setVisible(false);
-				f.btnS.setVisible(false);
-				f.btnSo.setVisible(false);
-				f.btnO.setVisible(true);
-				f.btnNo.setVisible(true);
-				f.btnN.setVisible(true);
-				f.btnNe.setVisible(true);
-				f.btnE.setVisible(true);
-			} else {
-				f.btnSo.setVisible(true);
-				f.btnO.setVisible(true);
-				f.btnNo.setVisible(true);
-				f.btnN.setVisible(true);
-				f.btnNe.setVisible(true);
-				f.btnE.setVisible(true);
-				f.btnSe.setVisible(true);
-				f.btnS.setVisible(true);
-			}
-		}
-
-		if (visitState == 0) {
-			if (i == 0) {
-				f.button1.setVisible(false);
-				f.button2.setVisible(false);
-				f.button3.setVisible(true);
-				f.button4.setVisible(true);
-				f.button5.setVisible(true);
-				f.btnPrecedent.setVisible(false);
-				f.btnSuivant.setVisible(true);
-			}
-
-			else if (i == 1) {
-				f.button1.setVisible(false);
-				f.button2.setVisible(true);
-				f.button3.setVisible(true);
-				f.button4.setVisible(true);
-				f.button5.setVisible(true);
-				f.btnPrecedent.setVisible(true);
-				f.btnSuivant.setVisible(true);
-			} else if (i == tabBilk.length - 1) {
-				f.button1.setVisible(true);
-				f.button2.setVisible(true);
-				f.button3.setVisible(true);
-				f.button4.setVisible(false);
-				f.button5.setVisible(false);
-				f.btnSuivant.setVisible(false);
-				f.btnPrecedent.setVisible(true);
-			} else if (i == tabBilk.length - 2) {
-				f.button1.setVisible(true);
-				f.button2.setVisible(true);
-				f.button3.setVisible(true);
-				f.button4.setVisible(true);
-				f.button5.setVisible(false);
-				f.btnSuivant.setVisible(true);
-				f.btnPrecedent.setVisible(true);
-			} else {
-				f.button1.setVisible(true);
-				f.button2.setVisible(true);
-				f.button3.setVisible(true);
-				f.button4.setVisible(true);
-				f.button5.setVisible(true);
-				f.btnSuivant.setVisible(true);
-				f.btnPrecedent.setVisible(true);
-			}
-		}
-
-		f.affichageImage();
 	}
 
 	public void recupererPhotosVrac(int nbPhotos, FenetrePropre f) throws IOException, SAXException, FlickrException {
@@ -256,11 +118,11 @@ public class Visit {
 		// creation d'un élément de type GeoInterface
 		geoInterface = apiAccess.getGeoInterface();
 		PhotoList listePhoto1 = new PhotoList();
-		tabBilk = new Picture[nbPhotos];
+		tabBilk = new PairOfPictures[nbPhotos];
 
 		// Création d'un paramètre de recherche
 		SearchParameters param = new SearchParameters();
-		String tagDemande = f.txtTapezVotreRecherche.getText();
+		String tagDemande = f.getJText().getText();
 		String[] tabTags = { tagDemande };
 		param.setHasGeo(true);
 		param.setTags(tabTags); // On definit le paramètre avec ce tag
@@ -268,7 +130,7 @@ public class Visit {
 
 		try {
 			// Récupération d'uneliste de photos
-			listePhoto1 = photosInterface.search(param, nbPhotos, 0);
+			listePhoto1 = photosInterface.search(param, (2*nbPhotos), 0);
 		} catch (FlickrException e3) {
 			// System.out.println(e3.getErrorMessage());
 			System.out.println("yo c'est l'erreur 1");
@@ -282,14 +144,21 @@ public class Visit {
 		
 		System.out.println(listePhoto1.size());
 		f.progressBar.setMaximum((Integer) f.choixNbOrdonne.getSelectedItem() + listePhoto1.size());
-
+		
 		// f.progressBar.setMaximum(nbPhotos);
-		for (int compt1 = 0; compt1 <= listePhoto1.size() - 1; compt1++) {
-			f.compteur++;
+		for (int compt1 = 0, step = 0; compt1 <= tabBilk.length - 1; compt1++) {
+			f.compteur = f.compteur+2;
 			f.progressBar.setValue(f.compteur);
-				Photo pic = (Photo) listePhoto1.get(compt1);
+			System.out.println(step);
+			
+				Photo pic = (Photo) listePhoto1.get(step);
+				step++;
+				Photo pic1 = (Photo) listePhoto1.get(step);
+				step++;
 				Picture pict = new Picture(pic, geoInterface, nameV);
-				tabBilk[compt1] = pict;
+				Picture pict1 = new Picture(pic1, geoInterface, nameV);
+				PairOfPictures pair = new PairOfPictures(pict, pict1);
+				tabBilk[compt1] = pair;
 				System.out.println("Url de la photo : " + pict.getMediumUrl());
 				System.out.println("tag de la photo : " + pict.getTag());
 				System.out.println("Latitude : " + pict.getLatitudeP());
@@ -306,11 +175,11 @@ public class Visit {
 		// creation d'un élément de type GeoInterface
 		geoInterface = apiAccess.getGeoInterface();
 		listePhoto1 = new PhotoList();
-		this.tabOrdonne = new Picture[(int) Math.sqrt(nbPhotos)][(int) Math.sqrt(nbPhotos)];
+		this.tabOrdonne = new PairOfPictures[(int) Math.sqrt(nbPhotos)][(int) Math.sqrt(nbPhotos)];
 
 		// Création d'un paramètre de recherche
 		SearchParameters param = new SearchParameters();
-		String tagDemande = f.txtTapezVotreRecherche.getText();
+		String tagDemande = f.getJText().getText();
 		String[] tabTags = { tagDemande };
 		param.setHasGeo(true);
 		param.setTags(tabTags);
@@ -324,18 +193,6 @@ public class Visit {
 		int l = 0;
 		int c = 0;
 		for (int compt2 = 0; compt2 <= nbPhotos - 1; compt2++) {
-			if (c < (Math.sqrt(nbPhotos) - 1)) {
-				this.tabOrdonne[l][c] = photoPasDePhoto;
-				c++;
-			} else if (c == (Math.sqrt(nbPhotos) - 1)) {
-				this.tabOrdonne[l][c] = photoPasDePhoto;
-				c = 0;
-				l++;
-			}
-		}
-		c = 0;
-		l = 0;
-		for (int compt2 = 0; compt2 <= nbPhotos - 1; compt2++) {
 			f.compteur++;
 			f.progressBar.setValue(f.compteur);
 			if (c < (Math.sqrt(nbPhotos) - 1)) {
@@ -344,17 +201,29 @@ public class Visit {
 					// Récupération d'uneliste de photos
 					PhotoList listePhoto1 = new PhotoList();
 					listePhoto1 = photosInterface.search(param, 1, 0);
-					if (!listePhoto1.isEmpty()) {
+					PairOfPictures pair = new PairOfPictures();
+					if (!listePhoto1.isEmpty()){
 						Photo pic = (Photo) listePhoto1.get(0);
-						Picture pic1 = new Picture(pic, geoInterface, nameV);
-						this.tabOrdonne[l][c] = pic1;
-						System.out.println("Url de la photo : " + pic1.getMediumUrl());
-						System.out.println("tag de la photo : " + pic1.getTag());
-						System.out.println("Latitude : " + pic1.getLatitudeP());
-						System.out.println("Longitude : " + pic1.getLongitudeP());
-					} else {
-						System.out.println("pas de Photo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+						Picture pict = new Picture(pic, geoInterface, nameV);
+						pair.setPic1(pict);
+					}else {
+						System.out.println("pas de Photo1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 					}
+					listePhoto1 = photosInterface.search(param, 10, 5);	
+					if (!listePhoto1.isEmpty()) {
+								Photo pic1 = (Photo) listePhoto1.get(0);
+								Picture pict1 = new Picture(pic1, geoInterface, nameV);
+								pair.setPic2(pict1);
+							
+					}else {
+						System.out.println("pas de Photo2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+					}
+						//this.tabOrdonne[l][c] = pair;
+//						System.out.println("Url de la photo : " + pict1.getMediumUrl());
+//						System.out.println("tag de la photo : " + pict1.getTag());
+//						System.out.println("Latitude : " + pict1.getLatitudeP());
+//						System.out.println("Longitude : " + pict1.getLongitudeP());
+					this.tabOrdonne[l][c] = pair;
 				} catch (FlickrException e3) {
 					// System.out.println(e3.getErrorMessage());
 					System.out.println("yo c'est l'erreur 1");
@@ -365,26 +234,39 @@ public class Visit {
 					// System.out.println(e2.getMessage());
 					System.out.println("yo c'est l'erreur 3");
 				}
+				
 				c++;
 				xMin = xMax;
 				xMax = xMax + xStep;
 			} else if (c == (Math.sqrt(nbPhotos) - 1)) {
 				param.setBBox(String.valueOf(xMin), String.valueOf(yMin), String.valueOf(xMax), String.valueOf(yMax));
 				try {
+					// Récupération d'uneliste de photos
 					PhotoList listePhoto1 = new PhotoList();
 					listePhoto1 = photosInterface.search(param, 1, 0);
-
-					if (!listePhoto1.isEmpty()) {
+					PairOfPictures pair = new PairOfPictures();
+					if (!listePhoto1.isEmpty()){
 						Photo pic = (Photo) listePhoto1.get(0);
-						positionGeographique = geoInterface.getLocation(pic.getId());
-						Picture pic1 = new Picture(pic, geoInterface, nameV);
-						this.tabOrdonne[l][c] = pic1;
-						System.out.println("Url de la photo : " + pic1.getMediumUrl());
-						System.out.println("tag de la photo : " + pic1.getTag());
-						System.out.println("Latitude : " + pic1.getLatitudeP());
-						System.out.println("Longitude : " + pic1.getLongitudeP());
+						Picture pict = new Picture(pic, geoInterface, nameV);
+						pair.setPic1(pict);
+					}else {
+						System.out.println("pas de Photo1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 					}
-
+					listePhoto1 = photosInterface.search(param, 10, 5);	
+					if (!listePhoto1.isEmpty()) {
+								Photo pic1 = (Photo) listePhoto1.get(0);
+								Picture pict1 = new Picture(pic1, geoInterface, nameV);
+								pair.setPic2(pict1);
+							
+					}else {
+						System.out.println("pas de Photo2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+					}
+						//this.tabOrdonne[l][c] = pair;
+//						System.out.println("Url de la photo : " + pict1.getMediumUrl());
+//						System.out.println("tag de la photo : " + pict1.getTag());
+//						System.out.println("Latitude : " + pict1.getLatitudeP());
+//						System.out.println("Longitude : " + pict1.getLongitudeP());
+					this.tabOrdonne[l][c] = pair;
 				} catch (FlickrException e3) {
 					System.out.println(e3.getErrorMessage());
 				} catch (IOException e1) {
