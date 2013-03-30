@@ -475,7 +475,10 @@ public class FenetrePropre extends JFrame {
 		btnCentral.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		btnCentral.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
 		getContentPane().add(btnCentral);
-
+		comboBox = new JComboBox<String>();
+		comboBox.setBounds(23, 56, 193, 27);
+		this.fillComboBox();
+		getContentPane().add(comboBox);
 		
 	}
 	
@@ -643,10 +646,6 @@ public class FenetrePropre extends JFrame {
 		}
 
 		affichageImage();
-		comboBox = new JComboBox<String>();
-		comboBox.setBounds(23, 56, 193, 27);
-		this.fillComboBox();
-		getContentPane().add(comboBox);
 	}
 	
 	public void fillComboBox() throws SQLException{

@@ -17,12 +17,13 @@ public class Site {
 		// Connexion a la base de
 		// donnee***************************************************
 		try {
-			Class.forName("org.postgresql.Driver");
+			//Class.forName("org.postgresql.Driver");
 			System.out.println("Driver O.K.");
 
-			String url = "jdbc:postgresql://localhost:5432/Visioscope";
-			String user = "postgres";
-			String passwd = "postgres";
+			//String url = "jdbc:postgresql://localhost:5432/Visioscope";
+			String url = "jdbc:postgresql://postgresql1.alwaysdata.com/visioscope_visio";
+			String user = "visioscope";
+			String passwd = "visioscope3000";
 
 			conn = DriverManager.getConnection(url, user, passwd);
 			System.out.println("Connexion effective !");
@@ -46,6 +47,7 @@ public class Site {
 	public float getLongitudeS() {
 		return longitudeS;
 	}
+
 
 	public void retrieveGeoSite(String st) throws SQLException {
 
