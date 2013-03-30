@@ -442,8 +442,8 @@ public class FenetrePropre extends JFrame {
 				try { //
 					String st = comboBox.getSelectedItem().toString();
 					site.retrieveGeoSite(st);
-					System.out.println(site.getLongitudeS());
-					System.out.println(site.getLatitudeS());
+					System.out.println(site.getLongitudeMonument());
+					System.out.println(site.getLatitudeMonument());
 				} catch (SQLException e1) { // //// On appelle la méthode
 											// retrieveGeoSite() qui fait
 					// TODO Auto-generated catch block ////// la recherche dans
