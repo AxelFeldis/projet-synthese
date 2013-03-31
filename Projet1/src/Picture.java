@@ -6,7 +6,6 @@ import com.aetrion.flickr.photos.GeoData;
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.geo.GeoInterface;
 
-
 public class Picture {
 	private String largeUrl = "http://ec.comps.canstockphoto.com/can-stock-photo_csp2974897.jpg";
 	private String mediumUrl = "http://ec.comps.canstockphoto.com/can-stock-photo_csp2974897.jpg";
@@ -18,8 +17,8 @@ public class Picture {
 	private Date dateP = new Date();
 	private GeoData positionGeographique;
 
-	
-	Picture(Photo p, GeoInterface geo, String tag) throws IOException, SAXException, FlickrException{
+	Picture(Photo p, GeoInterface geo, String tag) throws IOException,
+			SAXException, FlickrException {
 		mediumUrl = p.getMediumUrl();
 		largeUrl = p.getLargeUrl();
 		smallUrl = p.getSmallUrl();
@@ -29,41 +28,40 @@ public class Picture {
 		tagP = tag;
 
 	}
-	
-	Picture(){
+
+	Picture() {
 	}
-	
-	public String getTag(){
+
+	public String getTag() {
 		return tagP;
 	}
-	
-	public float getLongitudeP(){
+
+	public float getLongitudeP() {
 		return longitudeP;
 	}
-	
-	public float getLatitudeP(){
+
+	public float getLatitudeP() {
 		return latitudeP;
 	}
-	
-	public Integer getInOut(){
+
+	public Integer getInOut() {
 		return inOut;
 	}
-	
-	public Date getDateP(){
+
+	public Date getDateP() {
 		return dateP;
 	}
-	
-	public String getLargeUrl(){
+
+	public String getLargeUrl() {
 		return largeUrl;
 	}
-	
-	public String getSmallUrl(){
+
+	public String getSmallUrl() {
 		return smallUrl;
 	}
-	
-	public String getMediumUrl(){
+
+	public String getMediumUrl() {
 		return mediumUrl;
 	}
-	
 
 }

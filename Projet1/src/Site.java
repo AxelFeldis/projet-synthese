@@ -79,14 +79,22 @@ public class Site {
 
 	public void retrieveGeoSite(String st) throws SQLException {
 
-		// Récupération de la Longitude du Monument
+		// Récupération du nom du Monument
 		// Création d'un objet Statement
 		Statement state = conn.createStatement();
 		// L'objet ResultSet contient le résultat de la requête SQL
-		ResultSet resultLongM = state
-				.executeQuery("SELECT \"Site\".\"longitudeMonument\" FROM public.\"Site\" WHERE \"Site\".nom ='"
-						+ st + "';");
+		ResultSet resultNom = state.executeQuery("SELECT \"Site\".\"nom\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		// On récupère les MetaData
+		ResultSetMetaData resultMetaNom = resultNom.getMetaData();
+		while (resultNom.next()) {
+			for (int i = 1; i <= resultMetaNom.getColumnCount(); i++) {
+				nameS = resultNom.getObject(i).toString();
+			}
+		}
+		resultNom.close();
+
+		// Récupération de la Longitude du Monument
+		ResultSet resultLongM = state.executeQuery("SELECT \"Site\".\"longitudeMonument\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		ResultSetMetaData resultMetaLongM = resultLongM.getMetaData();
 		while (resultLongM.next()) {
 			for (int i = 1; i <= resultMetaLongM.getColumnCount(); i++) {
@@ -97,9 +105,7 @@ public class Site {
 		resultLongM.close();
 
 		// Récupération de la Latitude du Monument
-		ResultSet resultLatM = state
-				.executeQuery("SELECT \"Site\".\"latitudeMonument\" FROM public.\"Site\" WHERE \"Site\".nom ='"
-						+ st + "';");
+		ResultSet resultLatM = state.executeQuery("SELECT \"Site\".\"latitudeMonument\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		ResultSetMetaData resultMetaLatM = resultLatM.getMetaData();
 		while (resultLatM.next()) {
 			for (int i = 1; i <= resultMetaLatM.getColumnCount(); i++) {
@@ -110,9 +116,7 @@ public class Site {
 		resultLatM.close();
 
 		// Récupération de la Longitude de la Zone
-		ResultSet resultLongZ = state
-				.executeQuery("SELECT \"Site\".\"longitudeZone\" FROM public.\"Site\" WHERE \"Site\".nom ='"
-						+ st + "';");
+		ResultSet resultLongZ = state.executeQuery("SELECT \"Site\".\"longitudeZone\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		ResultSetMetaData resultMetaLongZ = resultLongZ.getMetaData();
 		while (resultLongZ.next()) {
 			for (int i = 1; i <= resultMetaLongZ.getColumnCount(); i++) {
@@ -123,9 +127,7 @@ public class Site {
 		resultLongZ.close();
 
 		// Récupération de la Latitude de la Zone
-		ResultSet resultLatZ = state
-				.executeQuery("SELECT \"Site\".\"latitudeZone\" FROM public.\"Site\" WHERE \"Site\".nom ='"
-						+ st + "';");
+		ResultSet resultLatZ = state.executeQuery("SELECT \"Site\".\"latitudeZone\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		ResultSetMetaData resultMetaLatZ = resultLatZ.getMetaData();
 		while (resultLatZ.next()) {
 			for (int i = 1; i <= resultMetaLatZ.getColumnCount(); i++) {
@@ -136,9 +138,7 @@ public class Site {
 		resultLatZ.close();
 
 		// Récupération de la Largeur de la Zone
-		ResultSet resultLargZ = state
-				.executeQuery("SELECT \"Site\".\"largeurZone\" FROM public.\"Site\" WHERE \"Site\".nom ='"
-						+ st + "';");
+		ResultSet resultLargZ = state.executeQuery("SELECT \"Site\".\"largeurZone\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		ResultSetMetaData resultMetaLargZ = resultLargZ.getMetaData();
 		while (resultLargZ.next()) {
 			for (int i = 1; i <= resultMetaLargZ.getColumnCount(); i++) {
@@ -149,9 +149,7 @@ public class Site {
 		resultLargZ.close();
 
 		// Récupération de la hauteur de la Zone
-		ResultSet resultHautZ = state
-				.executeQuery("SELECT \"Site\".\"hauteurZone\" FROM public.\"Site\" WHERE \"Site\".nom ='"
-						+ st + "';");
+		ResultSet resultHautZ = state.executeQuery("SELECT \"Site\".\"hauteurZone\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		ResultSetMetaData resultMetaHautZ = resultHautZ.getMetaData();
 		while (resultHautZ.next()) {
 			for (int i = 1; i <= resultMetaHautZ.getColumnCount(); i++) {
@@ -162,9 +160,7 @@ public class Site {
 		resultHautZ.close();
 
 		// Récupération de la Largeur du Monument
-		ResultSet resultLargM = state
-				.executeQuery("SELECT \"Site\".\"largeurMonument\" FROM public.\"Site\" WHERE \"Site\".nom ='"
-						+ st + "';");
+		ResultSet resultLargM = state.executeQuery("SELECT \"Site\".\"largeurMonument\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		ResultSetMetaData resultMetaLargM = resultLargM.getMetaData();
 		while (resultLargM.next()) {
 			for (int i = 1; i <= resultMetaLargM.getColumnCount(); i++) {
@@ -175,9 +171,7 @@ public class Site {
 		resultLargM.close();
 
 		// Récupération de la hauteur du Monument
-		ResultSet resultHautM = state
-				.executeQuery("SELECT \"Site\".\"hauteurMonument\" FROM public.\"Site\" WHERE \"Site\".nom ='"
-						+ st + "';");
+		ResultSet resultHautM = state.executeQuery("SELECT \"Site\".\"hauteurMonument\" FROM public.\"Site\" WHERE \"Site\".nom ='" + st + "';");
 		ResultSetMetaData resultMetaHautM = resultHautM.getMetaData();
 		while (resultHautM.next()) {
 			for (int i = 1; i <= resultMetaHautM.getColumnCount(); i++) {

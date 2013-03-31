@@ -25,13 +25,13 @@ import java.sql.Statement;
 public class FenetrePropre extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField txtTapezVotreRecherche = new JTextField();
+	//private JTextField txtTapezVotreRecherche = new JTextField();
 	private JLabel lblTitre = new JLabel("VisioScope");
 	private JLabel lblPhotoCentrale = new JLabel("");
 	JTextArea txtrBienvenueSurVisioscope = new JTextArea();
 
 	private JButton btnPrecedent = new JButton("Precedent");
-	private JButton btnOk  = new JButton("Ok");
+	private JButton btnOk = new JButton("Ok");
 	private JButton btnO = new JButton("O");
 	private JButton btnS = new JButton("S");
 	private JButton btnE = new JButton("E");
@@ -51,7 +51,7 @@ public class FenetrePropre extends JFrame {
 	public JButton btnOut = new JButton("Out");;
 	public JButton btnBilk = new JButton("Bilk");
 	private JButton btnCentral = new JButton("btnCentral");
-	//public URL url1; // url de la photo
+	// public URL url1; // url de la photo
 	private ThreadRecup thread;
 	public Integer[] tabNbOrdonne = { 4, 9, 16, 25, 36, 49, 64, 81 };
 	public Integer[] tabNbBilk = { 10, 20, 30, 40, 50, 60, 70, 80, 2000 };
@@ -63,7 +63,7 @@ public class FenetrePropre extends JFrame {
 	static PhotosInterface photosInterface;
 	public Visit visit1;
 	private int p1ou2 = 1;
-	Site site;
+	public Site site;
 
 	public FenetrePropre() throws SQLException {
 		site = new Site();
@@ -86,9 +86,9 @@ public class FenetrePropre extends JFrame {
 		choixNbOrdonne.setBounds(103, 240, 68, 20);
 		getContentPane().add(choixNbOrdonne);
 
-		txtTapezVotreRecherche.setBounds(23, 147, 131, 20);
-		txtTapezVotreRecherche.setColumns(10);
-		getContentPane().add(txtTapezVotreRecherche);
+//		txtTapezVotreRecherche.setBounds(23, 147, 131, 20);
+//		txtTapezVotreRecherche.setColumns(10);
+//		getContentPane().add(txtTapezVotreRecherche);
 
 		txtrBienvenueSurVisioscope
 				.setText("Bienvenue sur VisioScope, \nune application vous\npermettant d'effectuer\ndes visites virtuelles\nde n'importe quel site\ntouristique, archéologique\nou bien de monuments.\nEt ce n'importe où sur la\nTerre!\nCommencez par taper votre\nrecherche ci-dessus,\nchoisissez quel type de visite\nvous souhaitez effectuer et\ncliquez enfin sur le bouton \n\"Ok!");
@@ -97,274 +97,14 @@ public class FenetrePropre extends JFrame {
 		txtrBienvenueSurVisioscope.setForeground(Color.GRAY);
 		getContentPane().add(txtrBienvenueSurVisioscope);
 
+		comboBox = new JComboBox<String>();
+		comboBox.setBounds(23, 56, 193, 27);
+		this.fillComboBox();
+		getContentPane().add(comboBox);
 
+		// -------------------------------------------------INTERFACE-DE-VALIDATION(PARTIE-GAUCHE)----------------------------------------------------
 
-		btnPrecedent.setBounds(309, 365, 89, 31);
-		btnPrecedent.setVisible(false);
-		btnPrecedent.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("prec", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				System.out.println(p1ou2);
-
-			}
-		});
-		getContentPane().add(btnPrecedent);
-
-		btnSo.setBounds(333, 566, 135, 122);
-		btnSo.setVisible(false);
-		btnSo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("SO", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-
-
-			}
-		});
-		getContentPane().add(btnSo);
-
-		btnNo.setBounds(333, 88, 135, 122);
-		btnNo.setVisible(false);
-		btnNo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("NO", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(btnNo);
-
-		btnNe.setBounds(1132, 88, 121, 122);
-		btnNe.setVisible(false);
-		btnNe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("NE", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(btnNe);
-
-		btnS.setBounds(760, 614, 121, 122);
-		btnS.setVisible(false);
-		btnS.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("S", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(btnS);
-
-		btnSe.setBounds(1132, 566, 121, 122);
-
-		btnSe.setVisible(false);
-		btnSe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("SE", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(btnSe);
-
-		btnE.setBounds(1132, 318, 121, 125);
-		btnE.setVisible(false);
-		btnE.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("E", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(btnE);
-
-		btnSuivant.setBounds(1185, 365, 89, 31);
-		btnSuivant.setVisible(false);
-		btnSuivant.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				p1ou2 = 1;
-				visit1.move("suiv", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				System.out.println(p1ou2);
-
-			}
-		});
-		getContentPane().add(btnSuivant);
-
-		btnN.setBounds(760, 35, 135, 122);
-
-		btnN.setVisible(false);
-		
-		btnN.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("N", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		getContentPane().add(btnN);
-
-		btnO.setBounds(333, 318, 135, 125);
-		btnO.setVisible(false);
-		btnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("O", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(btnO);
-
-		button3.setBounds(770, 670, 89, 81);
-		button3.setVisible(false);
-		getContentPane().add(button3);
-
-		button2.setBounds(661, 670, 89, 81);
-		button2.setVisible(false);
-		btnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("prec", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(button2);
-
-		button4.setBounds(908, 670, 89, 81);
-		button4.setVisible(false);
-		btnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				visit1.move("suiv", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(button4);
-
-		button5.setBounds(1026, 670, 89, 81);
-		button5.setVisible(false);
-		btnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				visit1.move("2suiv", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(button5);
-
-		button1.setBounds(530, 670, 89, 81);
-		button1.setVisible(false);
-		btnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				visit1.move("2prec", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(button1);
-
-		btnQuitter.setBounds(1164, 699, 89, 23);
-		btnQuitter.setVisible(false);
-		btnQuitter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				BoutonsInterfaceDeplacementInvisible();
-				btnOk.setVisible(true);
-				btnBilk.setVisible(false);
-				btnIn.setVisible(false);
-				btnOut.setVisible(false);
-				choixNbBilk.setVisible(true);
-				choixNbOrdonne.setVisible(true);
-			}
-		});
-		getContentPane().add(btnQuitter);
-
-		progressBar.setBounds(749, 365, 146, 14);
-		progressBar.setVisible(false);
-		progressBar.setStringPainted(true);
-		getContentPane().add(progressBar);
-
+		// ---------------------------BOUTON-BILK----------------------------
 		btnBilk.setBounds(23, 178, 52, 23);
 		btnBilk.setVisible(false);
 		btnBilk.addActionListener(new ActionListener() {
@@ -390,11 +130,12 @@ public class FenetrePropre extends JFrame {
 		});
 		getContentPane().add(btnBilk);
 
+		// ---------------------------BOUTON-INDOOR----------------------------
 		btnIn.setBounds(92, 178, 52, 23);
 		btnIn.setVisible(false);
 		btnIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				visit1.setVisitState(1);
+				visit1.setVisitState(2);
 				BoutonsInterfaceDeplacementInvisible();
 				btnCentral.setVisible(true);
 				btnS.setVisible(true);
@@ -413,11 +154,12 @@ public class FenetrePropre extends JFrame {
 		});
 		getContentPane().add(btnIn);
 
+		// ---------------------------BOUTON-OUTDOOR----------------------------
 		btnOut.setBounds(164, 178, 52, 23);
 		btnOut.setVisible(false);
 		btnOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				visit1.setVisitState(1)	;			
+				visit1.setVisitState(1);
 				BoutonsInterfaceDeplacementInvisible();
 				btnCentral.setVisible(true);
 				btnS.setVisible(true);
@@ -435,6 +177,7 @@ public class FenetrePropre extends JFrame {
 		});
 		getContentPane().add(btnOut);
 
+		// ---------------------------BOUTON-OK----------------------------
 		btnOk.setBounds(164, 146, 52, 23);
 		btnOk.setVisible(true);
 		btnOk.addActionListener(new ActionListener() {
@@ -444,6 +187,7 @@ public class FenetrePropre extends JFrame {
 					site.retrieveGeoSite(st);
 					System.out.println(site.getLongitudeMonument());
 					System.out.println(site.getLatitudeMonument());
+					System.out.println(site.getNameS());
 				} catch (SQLException e1) { // //// On appelle la méthode
 											// retrieveGeoSite() qui fait
 					// TODO Auto-generated catch block ////// la recherche dans
@@ -454,20 +198,299 @@ public class FenetrePropre extends JFrame {
 				btnOk.setVisible(false);
 				choixNbBilk.setVisible(false);
 				choixNbOrdonne.setVisible(false);
-				visit1 = new Visit(txtTapezVotreRecherche.getText());
-				thread = new ThreadRecup((Integer) choixNbOrdonne
-						.getSelectedItem(), (Integer) choixNbBilk
-						.getSelectedItem(), FenetrePropre.this);
+				visit1 = new Visit(site.getNameS());
+				thread = new ThreadRecup((Integer) choixNbOrdonne.getSelectedItem(), (Integer) choixNbBilk.getSelectedItem(), FenetrePropre.this);
 				thread.start();
 			}
 		});
 		getContentPane().add(btnOk);
-		
+		// -------------------------------------------------BOUTOUS-DE-DEPLACEMENT(PARTIE-DROITE)----------------------------------------------------
+
+		// ---------------------------BOUTON-PRECEDENT----------------------------
+		btnPrecedent.setBounds(309, 365, 89, 31);
+		btnPrecedent.setVisible(false);
+		btnPrecedent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("prec", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				System.out.println(p1ou2);
+
+			}
+		});
+		getContentPane().add(btnPrecedent);
+
+		// ---------------------------BOUTON-SUIVANT----------------------------
+		btnSuivant.setBounds(1185, 365, 89, 31);
+		btnSuivant.setVisible(false);
+		btnSuivant.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				p1ou2 = 1;
+				visit1.move("suiv", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				System.out.println(p1ou2);
+
+			}
+		});
+		getContentPane().add(btnSuivant);
+
+		// ---------------------------BOUTON SUD----------------------------
+		btnS.setBounds(760, 614, 121, 122);
+		btnS.setVisible(false);
+		btnS.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("S", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(btnS);
+
+		// ---------------------------BOUTON-SUD-EST----------------------------
+		btnSe.setBounds(1132, 566, 121, 122);
+		btnSe.setVisible(false);
+		btnSe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("SE", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(btnSe);
+
+		// ---------------------------BOUTON-SUD-OUEST----------------------------
+		btnSo.setBounds(333, 566, 135, 122);
+		btnSo.setVisible(false);
+		btnSo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("SO", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(btnSo);
+
+		// ---------------------------BOUTON-NORD----------------------------
+		btnN.setBounds(760, 35, 135, 122);
+
+		btnN.setVisible(false);
+
+		btnN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("N", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		getContentPane().add(btnN);
+
+		// ---------------------------BOUTON-NORD-EST----------------------------
+		btnNe.setBounds(1132, 88, 121, 122);
+		btnNe.setVisible(false);
+		btnNe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("NE", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(btnNe);
+
+		// ---------------------------BOUTON-NORD-OUEST----------------------------
+		btnNo.setBounds(333, 88, 135, 122);
+		btnNo.setVisible(false);
+		btnNo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("NO", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(btnNo);
+
+		// ---------------------------BOUTON-EST----------------------------
+		btnE.setBounds(1132, 318, 121, 125);
+		btnE.setVisible(false);
+		btnE.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("E", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(btnE);
+
+		// ---------------------------BOUTON-OUEST----------------------------
+		btnO.setBounds(333, 318, 135, 125);
+		btnO.setVisible(false);
+		btnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("O", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(btnO);
+
+		// ---------------------------BOUTON-IMAGE1----------------------------
+		button1.setBounds(530, 670, 89, 81);
+		button1.setVisible(false);
+		btnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				visit1.move("2prec", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(button1);
+
+		// ---------------------------BOUTON-IMAGE2----------------------------
+		button2.setBounds(661, 670, 89, 81);
+		button2.setVisible(false);
+		btnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("prec", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(button2);
+
+		// ---------------------------BOUTON-IMAGE3----------------------------
+		button3.setBounds(770, 670, 89, 81);
+		button3.setVisible(false);
+		getContentPane().add(button3);
+
+		// ---------------------------BOUTON-IMAGE4----------------------------
+		button4.setBounds(908, 670, 89, 81);
+		button4.setVisible(false);
+		btnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				visit1.move("suiv", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(button4);
+
+		// ---------------------------BOUTON-IMAGE5----------------------------
+		button5.setBounds(1026, 670, 89, 81);
+		button5.setVisible(false);
+		btnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				visit1.move("2suiv", FenetrePropre.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		getContentPane().add(button5);
+
+		// ---------------------------BOUTON-QUITTER----------------------------
+		btnQuitter.setBounds(1164, 699, 89, 23);
+		btnQuitter.setVisible(false);
+		btnQuitter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BoutonsInterfaceDeplacementInvisible();
+				btnOk.setVisible(true);
+				btnBilk.setVisible(false);
+				btnIn.setVisible(false);
+				btnOut.setVisible(false);
+				choixNbBilk.setVisible(true);
+				choixNbOrdonne.setVisible(true);
+			}
+		});
+		getContentPane().add(btnQuitter);
+
+		progressBar.setBounds(749, 365, 146, 14);
+		progressBar.setVisible(false);
+		progressBar.setStringPainted(true);
+		getContentPane().add(progressBar);
+
+		// ---------------------------BOUTON-IMAGE-CENTRALE----------------------------
 		btnCentral.setBounds(593, 212, 457, 359);
 		btnCentral.setVisible(false);
 		btnCentral.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				p1ou2 = (p1ou2==1) ? 2 : 1;
+				p1ou2 = (p1ou2 == 1) ? 2 : 1;
 				affichageImage();
 				System.out.println(p1ou2);
 			}
@@ -475,18 +498,14 @@ public class FenetrePropre extends JFrame {
 		btnCentral.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		btnCentral.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
 		getContentPane().add(btnCentral);
-		comboBox = new JComboBox<String>();
-		comboBox.setBounds(23, 56, 193, 27);
-		this.fillComboBox();
-		getContentPane().add(comboBox);
-		
+
 	}
-	
-	public JTextField getJText(){
-		return txtTapezVotreRecherche;
-	}
-	
-	public void BoutonsInterfaceDeplacementInvisible(){
+
+//	public JTextField getJText() {
+//		return txtTapezVotreRecherche;
+//	}
+
+	public void BoutonsInterfaceDeplacementInvisible() {
 		btnSuivant.setVisible(false);
 		btnPrecedent.setVisible(false);
 		btnN.setVisible(false);
@@ -505,13 +524,13 @@ public class FenetrePropre extends JFrame {
 		btnCentral.setVisible(false);
 		btnQuitter.setVisible(false);
 	}
-	
+
 	public void GestionBoutons() throws SQLException {
-		
+
 		// System.out.println(ligne);
 		// System.out.println(colonne);
 		if (visit1.getVisitState() == 1) {
-			if ((visit1.colonne == 0) && (visit1.ligne == visit1.tabOrdonne.length - 1)) {
+			if ((visit1.colonne == 0) && (visit1.ligne == visit1.tabOutDoor.length - 1)) {
 				btnSo.setVisible(false);
 				btnO.setVisible(false);
 				btnNo.setVisible(false);
@@ -520,7 +539,7 @@ public class FenetrePropre extends JFrame {
 				btnE.setVisible(true);
 				btnSe.setVisible(false);
 				btnS.setVisible(false);
-			} else if ((visit1.colonne == visit1.tabOrdonne.length - 1) && (visit1.ligne == 0)) {
+			} else if ((visit1.colonne == visit1.tabOutDoor.length - 1) && (visit1.ligne == 0)) {
 				btnSe.setVisible(false);
 				btnE.setVisible(false);
 				btnNe.setVisible(false);
@@ -539,7 +558,7 @@ public class FenetrePropre extends JFrame {
 				btnE.setVisible(true);
 				btnSe.setVisible(true);
 				btnS.setVisible(true);
-			} else if ((visit1.colonne == (visit1.tabOrdonne.length - 1)) && (visit1.ligne == (visit1.tabOrdonne.length - 1))) {
+			} else if ((visit1.colonne == (visit1.tabOutDoor.length - 1)) && (visit1.ligne == (visit1.tabOutDoor.length - 1))) {
 				btnSe.setVisible(false);
 				btnE.setVisible(false);
 				btnNe.setVisible(false);
@@ -560,7 +579,7 @@ public class FenetrePropre extends JFrame {
 				btnS.setVisible(true);
 			}
 
-			else if (visit1.colonne == (visit1.tabOrdonne.length - 1)) {
+			else if (visit1.colonne == (visit1.tabOutDoor.length - 1)) {
 				btnSe.setVisible(false);
 				btnE.setVisible(false);
 				btnNe.setVisible(false);
@@ -578,7 +597,95 @@ public class FenetrePropre extends JFrame {
 				btnS.setVisible(true);
 				btnSe.setVisible(true);
 				btnE.setVisible(true);
-			} else if (visit1.ligne == (visit1.tabOrdonne.length - 1)) {
+			} else if (visit1.ligne == (visit1.tabOutDoor.length - 1)) {
+				btnSe.setVisible(false);
+				btnS.setVisible(false);
+				btnSo.setVisible(false);
+				btnO.setVisible(true);
+				btnNo.setVisible(true);
+				btnN.setVisible(true);
+				btnNe.setVisible(true);
+				btnE.setVisible(true);
+			} else {
+				btnSo.setVisible(true);
+				btnO.setVisible(true);
+				btnNo.setVisible(true);
+				btnN.setVisible(true);
+				btnNe.setVisible(true);
+				btnE.setVisible(true);
+				btnSe.setVisible(true);
+				btnS.setVisible(true);
+			}
+		}
+		if (visit1.getVisitState() == 2) {
+			if ((visit1.colonne == 0) && (visit1.ligne == visit1.tabInDoor.length - 1)) {
+				btnSo.setVisible(false);
+				btnO.setVisible(false);
+				btnNo.setVisible(false);
+				btnN.setVisible(true);
+				btnNe.setVisible(true);
+				btnE.setVisible(true);
+				btnSe.setVisible(false);
+				btnS.setVisible(false);
+			} else if ((visit1.colonne == visit1.tabInDoor.length - 1) && (visit1.ligne == 0)) {
+				btnSe.setVisible(false);
+				btnE.setVisible(false);
+				btnNe.setVisible(false);
+				btnN.setVisible(false);
+				btnNo.setVisible(false);
+				btnO.setVisible(true);
+				btnSo.setVisible(true);
+				btnS.setVisible(true);
+
+			} else if ((visit1.colonne == 0) && (visit1.ligne == 0)) {
+				btnSo.setVisible(false);
+				btnO.setVisible(false);
+				btnNo.setVisible(false);
+				btnN.setVisible(false);
+				btnNe.setVisible(false);
+				btnE.setVisible(true);
+				btnSe.setVisible(true);
+				btnS.setVisible(true);
+			} else if ((visit1.colonne == (visit1.tabInDoor.length - 1)) && (visit1.ligne == (visit1.tabInDoor.length - 1))) {
+				btnSe.setVisible(false);
+				btnE.setVisible(false);
+				btnNe.setVisible(false);
+				btnN.setVisible(true);
+				btnNo.setVisible(true);
+				btnO.setVisible(true);
+				btnSo.setVisible(false);
+				btnS.setVisible(false);
+
+			} else if (visit1.colonne == 0) {
+				btnSo.setVisible(false);
+				btnO.setVisible(false);
+				btnNo.setVisible(false);
+				btnN.setVisible(true);
+				btnNe.setVisible(true);
+				btnE.setVisible(true);
+				btnSe.setVisible(true);
+				btnS.setVisible(true);
+			}
+
+			else if (visit1.colonne == (visit1.tabInDoor.length - 1)) {
+				btnSe.setVisible(false);
+				btnE.setVisible(false);
+				btnNe.setVisible(false);
+				btnN.setVisible(true);
+				btnNo.setVisible(true);
+				btnO.setVisible(true);
+				btnSo.setVisible(true);
+				btnS.setVisible(true);
+			} else if (visit1.ligne == 0) {
+				btnNe.setVisible(false);
+				btnN.setVisible(false);
+				btnNo.setVisible(false);
+				btnO.setVisible(true);
+				btnSo.setVisible(true);
+				btnS.setVisible(true);
+				btnSe.setVisible(true);
+				btnE.setVisible(true);
+			} else if (visit1.ligne == (visit1.tabInDoor.length - 1)) {
 				btnSe.setVisible(false);
 				btnS.setVisible(false);
 				btnSo.setVisible(false);
@@ -647,42 +754,45 @@ public class FenetrePropre extends JFrame {
 
 		affichageImage();
 	}
-	
-	public void fillComboBox() throws SQLException{
+
+	public void fillComboBox() throws SQLException {
 		// Remplissage de la comboBox
 
-				// Création d'un objet Statement
-				Statement state = site.getConnection().createStatement();
-				// L'objet ResultSet contient le résultat de la requête SQL
-				ResultSet result = state.executeQuery("SELECT nom FROM \"Site\";");
-				// On récupère les MetaData
-				ResultSetMetaData resultMeta = result.getMetaData();
-				// On affiche le nom des colonnes
+		// Création d'un objet Statement
+		Statement state = site.getConnection().createStatement();
+		// L'objet ResultSet contient le résultat de la requête SQL
+		ResultSet result = state.executeQuery("SELECT nom FROM \"Site\";");
+		// On récupère les MetaData
+		ResultSetMetaData resultMeta = result.getMetaData();
+		// On affiche le nom des colonnes
 
-				while (result.next()) {
-					for (int i = 1; i <= resultMeta.getColumnCount(); i++) {
-						String s = result.getObject(i).toString();
-						System.out.println(s);
-						comboBox.addItem(s);
-					}
+		while (result.next()) {
+			for (int i = 1; i <= resultMeta.getColumnCount(); i++) {
+				String s = result.getObject(i).toString();
+				System.out.println(s);
+				comboBox.addItem(s);
+			}
 
-				}
-				System.out.println(comboBox.getItemCount());
-				result.close();
-				state.close();
+		}
+		System.out.println(comboBox.getItemCount());
+		result.close();
+		state.close();
 	}
 
 	public void affichageImage() {
 		URL url1 = null;
 
 		try {
-			//URL url1;
+			// URL url1;
 			// On essaye de transfomer urlString en type URL
 			if (visit1.getVisitState() == 0) {
 				url1 = new URL(visit1.tabBilk[visit1.i].getPic(p1ou2).getLargeUrl());
 			} else if (visit1.getVisitState() == 1) {
 
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne].getPic(p1ou2).getLargeUrl());
+				url1 = new URL(visit1.tabOutDoor[visit1.ligne][visit1.colonne].getPic(p1ou2).getLargeUrl());
+			} else if (visit1.getVisitState() == 2) {
+
+				url1 = new URL(visit1.tabInDoor[visit1.ligne][visit1.colonne].getPic(p1ou2).getLargeUrl());
 			}
 		} catch (MalformedURLException e1) {
 			System.out.println(e1.getMessage());
@@ -691,9 +801,12 @@ public class FenetrePropre extends JFrame {
 		btnCentral.setIcon(img);
 		if (btnSe.isVisible()) {
 			try {
+				if (visit1.getVisitState() == 1) {
+					url1 = new URL(visit1.tabOutDoor[visit1.ligne + 1][visit1.colonne + 1].getPic(1).getSmallUrl());
+				} else {
+					url1 = new URL(visit1.tabInDoor[visit1.ligne + 1][visit1.colonne + 1].getPic(1).getSmallUrl());
 
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne + 1].getPic(1).getSmallUrl());
-
+				}
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -703,9 +816,11 @@ public class FenetrePropre extends JFrame {
 
 		if (btnS.isVisible()) {
 			try {
-
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne].getPic(1).getSmallUrl());
-
+				if (visit1.getVisitState() == 1) {
+					url1 = new URL(visit1.tabOutDoor[visit1.ligne + 1][visit1.colonne].getPic(1).getSmallUrl());
+				} else {
+					url1 = new URL(visit1.tabInDoor[visit1.ligne + 1][visit1.colonne].getPic(1).getSmallUrl());
+				}
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -715,8 +830,11 @@ public class FenetrePropre extends JFrame {
 
 		if (btnSo.isVisible()) {
 			try {
-
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne + 1][visit1.colonne - 1].getPic(1).getSmallUrl());
+				if (visit1.getVisitState() == 1) {
+					url1 = new URL(visit1.tabOutDoor[visit1.ligne + 1][visit1.colonne - 1].getPic(1).getSmallUrl());
+				} else {
+					url1 = new URL(visit1.tabInDoor[visit1.ligne + 1][visit1.colonne - 1].getPic(1).getSmallUrl());
+				}
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -726,9 +844,11 @@ public class FenetrePropre extends JFrame {
 
 		if (btnO.isVisible()) {
 			try {
-
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne - 1].getPic(1).getSmallUrl());
-
+				if (visit1.getVisitState() == 1) {
+					url1 = new URL(visit1.tabOutDoor[visit1.ligne][visit1.colonne - 1].getPic(1).getSmallUrl());
+				} else {
+					url1 = new URL(visit1.tabInDoor[visit1.ligne][visit1.colonne - 1].getPic(1).getSmallUrl());
+				}
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -738,9 +858,11 @@ public class FenetrePropre extends JFrame {
 
 		if (btnNo.isVisible()) {
 			try {
-
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne - 1].getPic(1).getSmallUrl());
-
+				if (visit1.getVisitState() == 1) {
+					url1 = new URL(visit1.tabOutDoor[visit1.ligne - 1][visit1.colonne - 1].getPic(1).getSmallUrl());
+				} else {
+					url1 = new URL(visit1.tabInDoor[visit1.ligne - 1][visit1.colonne - 1].getPic(1).getSmallUrl());
+				}
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -750,9 +872,11 @@ public class FenetrePropre extends JFrame {
 
 		if (btnN.isVisible()) {
 			try {
-
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne].getPic(1).getSmallUrl());
-
+				if (visit1.getVisitState() == 1) {
+					url1 = new URL(visit1.tabOutDoor[visit1.ligne - 1][visit1.colonne].getPic(1).getSmallUrl());
+				} else {
+					url1 = new URL(visit1.tabInDoor[visit1.ligne - 1][visit1.colonne].getPic(1).getSmallUrl());
+				}
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -762,8 +886,11 @@ public class FenetrePropre extends JFrame {
 
 		if (btnNe.isVisible()) {
 			try {
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne - 1][visit1.colonne + 1].getPic(1).getSmallUrl());
-
+				if (visit1.getVisitState() == 1) {
+					url1 = new URL(visit1.tabOutDoor[visit1.ligne - 1][visit1.colonne + 1].getPic(1).getSmallUrl());
+				} else {
+					url1 = new URL(visit1.tabInDoor[visit1.ligne - 1][visit1.colonne + 1].getPic(1).getSmallUrl());
+				}
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
@@ -773,9 +900,12 @@ public class FenetrePropre extends JFrame {
 
 		if (btnE.isVisible()) {
 			try {
+				if (visit1.getVisitState() == 1) {
+					url1 = new URL(visit1.tabOutDoor[visit1.ligne][visit1.colonne + 1].getPic(1).getSmallUrl());
+				} else {
+					url1 = new URL(visit1.tabInDoor[visit1.ligne][visit1.colonne + 1].getPic(1).getSmallUrl());
 
-				url1 = new URL(visit1.tabOrdonne[visit1.ligne][visit1.colonne + 1].getPic(1).getSmallUrl());
-
+				}
 			} catch (MalformedURLException e1) {
 				System.out.println(e1.getMessage());
 			}
