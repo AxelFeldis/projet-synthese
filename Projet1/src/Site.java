@@ -6,16 +6,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Site {
-	String nameS;
-	float longitudeMonument;
-	float latitudeMonument;
-	float longitudeZone;
-	float latitudeZone;
-	float hauteurMonument;
-	float largeurMonument;
-	float hauteurZone;
-	float largeurZone;
-	Connection conn;
+	private String nameS;
+	private float longitudeMonument;
+	private float latitudeMonument;
+	private float longitudeZone;
+	private float latitudeZone;
+	private float hauteurMonument;
+	private float largeurMonument;
+	private float hauteurZone;
+	private float largeurZone;
+	private Connection conn;
 
 	Site() throws SQLException {
 		// Connexion a la base de

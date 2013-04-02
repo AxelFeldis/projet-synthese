@@ -6,6 +6,8 @@ public class LancementApplication {
 			public void run() {
 				try {
 					FenetrePropre window = new FenetrePropre();
+					//FenetreClean window = new FenetreClean();
+					//window.pack();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

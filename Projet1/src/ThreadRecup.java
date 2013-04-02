@@ -7,35 +7,32 @@ import com.aetrion.flickr.FlickrException;
 class ThreadRecup extends Thread {
 
 	private FenetrePropre fenetre;
-	private int nbPhotosOrdonne;
+	private int nbPhotosOut;
 	private int nbPhotosBilk;
+	private int nbPhotosIn;
 
-	public ThreadRecup(int nbPOrdonne, int nbPBilk, FenetrePropre f) {
+	public ThreadRecup(int nbPOut, int nbPBilk, int nbPIn, FenetrePropre f) {
 		fenetre = f;
-		nbPhotosOrdonne = nbPOrdonne;
+		nbPhotosIn = nbPIn;
+		nbPhotosOut = nbPOut;
 		nbPhotosBilk = nbPBilk;
 	}
 
 	public void run() {
-		// on récupère le texte tapé par l'utilisateur
-		// String tagDemande = txtTapezVotreRecherche.getText();
-		// fenetre.progressBar.setMaximum(nbPhotosOrdonne + nbPhotosBilk);
 		try {
 			fenetre.visit1.recupererPhotosBilk(nbPhotosBilk, fenetre);
-//			fenetre.visit1.retrievePictureOrdonnees(nbPhotosOrdonne, 78.040674,
-//					27.171792, 78.043635, 27.174541, fenetre);
-			fenetre.visit1.retrievePictureOutDoor(nbPhotosOrdonne, (fenetre.site.getLongitudeZone() - (fenetre.site.getLargeurZone() / 2)),
+
+			fenetre.visit1.retrievePictureOutDoor(nbPhotosOut, (fenetre.site.getLongitudeZone() - (fenetre.site.getLargeurZone() / 2)),
 					(fenetre.site.getLatitudeZone() - (fenetre.site.getHauteurZone() / 2)),
 					(fenetre.site.getLongitudeZone() + (fenetre.site.getLargeurZone() / 2)),
 					(fenetre.site.getLatitudeZone() + (fenetre.site.getHauteurZone() / 2)), fenetre);
-			fenetre.visit1.retrievePictureIndoor(nbPhotosOrdonne, (fenetre.site.getLongitudeMonument() - (fenetre.site.getLargeurMonument() / 2)),
-					(fenetre.site.getLatitudeMonument() - (fenetre.site.getHauteurMonument() / 2)),
-					(fenetre.site.getLongitudeMonument() + (fenetre.site.getLargeurMonument() / 2)),
-					(fenetre.site.getLatitudeMonument() + (fenetre.site.getHauteurMonument() / 2)), fenetre);
-			
-			System.out.println(fenetre.site.getLongitudeZone());
-			// fenetre.visit1.retrievePictureOrdonnees(nbPhotosOrdonne,
-			// 27.171792, 78.040674, 27.174541, 78.043635, fenetre);
+			if (fenetre.site.getHauteurMonument() != 0) {
+				fenetre.visit1.retrievePictureIndoor(nbPhotosIn, (fenetre.site.getLongitudeMonument() - (fenetre.site.getLargeurMonument() / 2)),
+						(fenetre.site.getLatitudeMonument() - (fenetre.site.getHauteurMonument() / 2)),
+						(fenetre.site.getLongitudeMonument() + (fenetre.site.getLargeurMonument() / 2)),
+						(fenetre.site.getLatitudeMonument() + (fenetre.site.getHauteurMonument() / 2)), fenetre);
+			}
+			// System.out.println(fenetre.site.getLongitudeZone());
 
 			// fenetre.recupererPhotosOrdonnees(16, 2.294, 48.853,2.297,48.858);
 		} catch (IOException e2) {

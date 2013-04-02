@@ -1,18 +1,28 @@
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
 
 import com.aetrion.flickr.photos.PhotosInterface;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.net.MalformedURLException;
@@ -22,13 +32,13 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class FenetrePropre extends JFrame {
-
+public class FenetreClean extends JFrame {
 	private static final long serialVersionUID = 1L;
 	// private JTextField txtTapezVotreRecherche = new JTextField();
 	private JLabel lblTitre = new JLabel("VisioScope");
 	private JLabel lblPhotoCentrale = new JLabel("");
 	private JTextArea txtrBienvenueSurVisioscope = new JTextArea();
+	private JLabel choixMonument = new JLabel("Choisissez un monument");
 	private JLabel nbPhotos = new JLabel("Choisissez le nombre de photos");
 	private JLabel nbBilk = new JLabel("Bilk :");
 	private JLabel nbIn = new JLabel("In :");
@@ -58,159 +68,155 @@ public class FenetrePropre extends JFrame {
 	private JComboBox<String> comboBox = new JComboBox();
 	private static PhotosInterface photosInterface;
 	private int p1ou2 = 1;
-	
+
 	public JButton btnIn = new JButton("In");
 	public JButton btnOut = new JButton("Out");
 	public JButton btnBilk = new JButton("Bilk");
 	public JComboBox<Integer> choixNbOut = new JComboBox(tabNbOrdonne);
 	public JComboBox<Integer> choixNbIn = new JComboBox(tabNbOrdonne);
 	public JProgressBar progressBar = new JProgressBar();
-	
+
 	public Visit visit1;
 	public Site site;
 
-	public FenetrePropre() throws SQLException {
+	public FenetreClean() throws SQLException {
 		site = new Site();
 		setTitle("VisioScope");
 		setVisible(true);
 		setSize(1300, 800);
 		setResizable(true);
-		getContentPane().setLayout(null);
-		getContentPane().setBackground(Color.DARK_GRAY);
-		getContentPane().setForeground(Color.GRAY);
 
-		lblTitre.setBounds(530, 24, 152, 59);
+		JPanel gauche = new JPanel();
+		BorderLayout layoutGauche = new BorderLayout();
+		gauche.setLayout(layoutGauche);
+
+		JPanel droite = new JPanel();
+		BorderLayout layoutDroite = new BorderLayout();
+		droite.setLayout(layoutDroite);
+
+		// Create a split pane with the two scroll panes in it.
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, gauche, droite);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(150);
+
+		// Provide minimum sizes for the two components in the split pane
+		Dimension minimumSize = new Dimension(100, 50);
+		gauche.setMinimumSize(minimumSize);
+		droite.setMinimumSize(minimumSize);
+		getContentPane().add(splitPane);
+
+		JPanel partieValidation = new JPanel();
+		GridBagLayout layoutPartieValidation = new GridBagLayout();
+		partieValidation.setLayout(layoutPartieValidation);
+
+		gauche.add(partieValidation, BorderLayout.NORTH);
+		GridBagConstraints contraintes = new GridBagConstraints();
+
+		splitPane.setBackground(Color.DARK_GRAY);
+		splitPane.setForeground(Color.GRAY);
+
 		lblTitre.setForeground(Color.GRAY);
 		lblTitre.setFont(new Font("Arial", Font.BOLD, 28));
-		getContentPane().add(lblTitre);
-		
-		nbPhotos.setBounds(23, 180, 200, 20);
-		nbPhotos.setBackground(Color.DARK_GRAY);
-		nbPhotos.setForeground(Color.GRAY);
-		getContentPane().add(nbPhotos);
-		
-		nbBilk.setBounds(23, 220, 50, 20);
-		nbBilk.setBackground(Color.DARK_GRAY);
-		nbBilk.setForeground(Color.GRAY);
-		getContentPane().add(nbBilk);
-		
-		choixNbBilk.setBounds(23, 240, 50, 20);
-		getContentPane().add(choixNbBilk);
-		
-		nbOut.setBounds(103, 220, 50, 20);
-		nbOut.setBackground(Color.DARK_GRAY);
-		nbOut.setForeground(Color.GRAY);
-		getContentPane().add(nbOut);
-		
-		choixNbOut.setBounds(103, 240, 50, 20);
-		getContentPane().add(choixNbOut);
 
-		
-		nbIn.setBounds(183, 220, 50, 20);
-		nbIn.setBackground(Color.DARK_GRAY);
-		nbIn.setForeground(Color.GRAY);
-		getContentPane().add(nbIn);
+		contraintes.gridx = 0;
+		contraintes.gridy = 0;
+		contraintes.gridwidth = 11;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.NONE;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		layoutPartieValidation.setConstraints(choixMonument, contraintes);
+		partieValidation.add(choixMonument);
 
-		choixNbIn.setBounds(183, 240, 50, 20);
-		getContentPane().add(choixNbIn);
-
-		
-		// txtTapezVotreRecherche.setBounds(23, 147, 131, 20);
-		// txtTapezVotreRecherche.setColumns(10);
-		// getContentPane().add(txtTapezVotreRecherche);
-
-		txtrBienvenueSurVisioscope
-				.setText("Bienvenue sur VisioScope, \nune application vous\npermettant d'effectuer\ndes visites virtuelles\nde n'importe quel site\ntouristique, archéologique\nou bien de monuments.\nEt ce n'importe où sur la\nTerre!\nCommencez par taper votre\nrecherche ci-dessus,\nchoisissez quel type de visite\nvous souhaitez effectuer et\ncliquez enfin sur le bouton \n\"Ok!");
-		txtrBienvenueSurVisioscope.setBounds(23, 348, 249, 285);
-		txtrBienvenueSurVisioscope.setBackground(Color.DARK_GRAY);
-		txtrBienvenueSurVisioscope.setForeground(Color.GRAY);
-		getContentPane().add(txtrBienvenueSurVisioscope);
-
+		contraintes.gridx = 2;
+		contraintes.gridy = 3;
+		contraintes.gridwidth = 8;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
 		comboBox = new JComboBox<String>();
-		comboBox.setBounds(23, 56, 193, 27);
 		this.fillComboBox();
-		getContentPane().add(comboBox);
+		layoutPartieValidation.setConstraints(comboBox, contraintes);
+		partieValidation.add(comboBox);
 
-		// -------------------------------------------------INTERFACE-DE-VALIDATION(PARTIE-GAUCHE)----------------------------------------------------
+		contraintes.gridx = 1;
+		contraintes.gridy = 5;
+		contraintes.gridwidth = 11;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		layoutPartieValidation.setConstraints(nbPhotos, contraintes);
+		partieValidation.add(nbPhotos);
 
-		// ---------------------------BOUTON-BILK----------------------------
-		btnBilk.setBounds(23, 178, 52, 23);
-		btnBilk.setVisible(false);
-		btnBilk.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (progressBar.getValue() != progressBar.getMaximum()) {
-					progressBar.setBounds(23, 240, 146, 14);
-				}
-				visit1.setVisitState(0);
-				BoutonsInterfaceDeplacementInvisible();
-				btnCentral.setVisible(true);
-				btnSuivant.setVisible(true);
-				btnPrecedent.setVisible(true);
-				btnQuitter.setVisible(true);
-				visit1.move("init", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		contraintes.gridx = 1;
+		contraintes.gridy = 7;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		layoutPartieValidation.setConstraints(nbBilk, contraintes);
+		partieValidation.add(nbBilk);
 
-			}
-		});
-		getContentPane().add(btnBilk);
+		contraintes.gridx = 5;
+		contraintes.gridy = 7;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		layoutPartieValidation.setConstraints(nbOut, contraintes);
+		partieValidation.add(nbOut);
 
-		// ---------------------------BOUTON-INDOOR----------------------------
-		btnIn.setBounds(92, 178, 52, 23);
-		btnIn.setVisible(false);
-		btnIn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				visit1.setVisitState(2);
-				BoutonsInterfaceDeplacementInvisible();
-				btnCentral.setVisible(true);
-				btnS.setVisible(true);
-				btnE.setVisible(true);
-				btnSe.setVisible(true);
-				btnQuitter.setVisible(true);
-				visit1.move("init", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		contraintes.gridx = 9;
+		contraintes.gridy = 7;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		layoutPartieValidation.setConstraints(nbIn, contraintes);
+		partieValidation.add(nbIn);
 
-			}
-		});
-		getContentPane().add(btnIn);
+		contraintes.gridx = 1;
+		contraintes.gridy = 9;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		layoutPartieValidation.setConstraints(choixNbBilk, contraintes);
+		partieValidation.add(choixNbBilk);
 
-		// ---------------------------BOUTON-OUTDOOR----------------------------
-		btnOut.setBounds(164, 178, 52, 23);
-		btnOut.setVisible(false);
-		btnOut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (progressBar.getValue() != progressBar.getMaximum()) {
-					progressBar.setBounds(23, 240, 146, 14);
-				}
-				visit1.setVisitState(1);
-				BoutonsInterfaceDeplacementInvisible();
-				btnCentral.setVisible(true);
-				btnS.setVisible(true);
-				btnE.setVisible(true);
-				btnSe.setVisible(true);
-				btnQuitter.setVisible(true);
-				visit1.move("init", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		getContentPane().add(btnOut);
+		contraintes.gridx = 5;
+		contraintes.gridy = 9;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		layoutPartieValidation.setConstraints(choixNbOut, contraintes);
+		partieValidation.add(choixNbOut);
 
-		// ---------------------------BOUTON-OK----------------------------
-		btnOk.setBounds(164, 146, 52, 23);
+		contraintes.gridx = 9;
+		contraintes.gridy = 9;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		layoutPartieValidation.setConstraints(choixNbIn, contraintes);
+		partieValidation.add(choixNbIn);
+
+		contraintes.gridx = 4;
+		contraintes.gridy = 11;
+		contraintes.gridwidth = 4;
+		contraintes.gridheight = 2;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
 		btnOk.setVisible(true);
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -224,65 +230,203 @@ public class FenetrePropre extends JFrame {
 					e1.printStackTrace(); //
 				} //
 				progressBar.setVisible(true);
-				btnOk.setVisible(false);
-				choixNbBilk.setVisible(false);
-				choixNbOut.setVisible(false);
-				choixNbIn.setVisible(false);
+//				btnOk.setVisible(false);
+//				choixNbBilk.setVisible(false);
+//				choixNbOut.setVisible(false);
+//				choixNbIn.setVisible(false);
 
 				visit1 = new Visit(site.getNameS());
 				thread = new ThreadRecup((Integer) choixNbOut.getSelectedItem(), (Integer) choixNbBilk.getSelectedItem(),
-						(Integer) choixNbIn.getSelectedItem(), FenetrePropre.this);
+						(Integer) choixNbIn.getSelectedItem(), FenetreClean.this);
 				thread.start();
 			}
 		});
-		getContentPane().add(btnOk);
-		// -------------------------------------------------BOUTOUS-DE-DEPLACEMENT(PARTIE-DROITE)----------------------------------------------------
+		layoutPartieValidation.setConstraints(btnOk, contraintes);
+		partieValidation.add(btnOk);
 
-		// ---------------------------BOUTON-PRECEDENT----------------------------
-		btnPrecedent.setBounds(309, 365, 89, 31);
-		btnPrecedent.setVisible(false);
-		btnPrecedent.addActionListener(new ActionListener() {
+		contraintes.gridx = 1;
+		contraintes.gridy = 14;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 2;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		//btnBilk.setVisible(false);
+		btnBilk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+//				if (progressBar.getValue() != progressBar.getMaximum()) {
+//					progressBar.setBounds(23, 240, 146, 14);
+//				}
+				visit1.setVisitState(0);
+				BoutonsInterfaceDeplacementInvisible();
+				btnCentral.setVisible(true);
+				btnSuivant.setVisible(true);
+				btnPrecedent.setVisible(true);
+				btnQuitter.setVisible(true);
+				visit1.move("init", FenetreClean.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
+		layoutPartieValidation.setConstraints(btnBilk, contraintes);
+		partieValidation.add(btnBilk);
+
+		contraintes.gridx = 5;
+		contraintes.gridy = 14;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 2;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		//btnOut.setVisible(false);
+		btnOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+//				if (progressBar.getValue() != progressBar.getMaximum()) {
+//					progressBar.setBounds(23, 240, 146, 14);
+//				}
+				visit1.setVisitState(1);
+				BoutonsInterfaceDeplacementInvisible();
+				btnCentral.setVisible(true);
+				btnS.setVisible(true);
+				btnE.setVisible(true);
+				btnSe.setVisible(true);
+				btnQuitter.setVisible(true);
+				visit1.move("init", FenetreClean.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		layoutPartieValidation.setConstraints(btnOut, contraintes);
+		partieValidation.add(btnOut);
+
+		contraintes.gridx = 9;
+		contraintes.gridy = 14;
+		contraintes.gridwidth = 3;
+		contraintes.gridheight = 2;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		//btnIn.setVisible(false);
+		btnIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				visit1.setVisitState(2);
+				BoutonsInterfaceDeplacementInvisible();
+				btnCentral.setVisible(true);
+				btnS.setVisible(true);
+				btnE.setVisible(true);
+				btnSe.setVisible(true);
+				btnQuitter.setVisible(true);
+				visit1.move("init", FenetreClean.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
+		layoutPartieValidation.setConstraints(btnIn, contraintes);
+		partieValidation.add(btnIn);
+		
+		contraintes.gridx = 3;
+		contraintes.gridy = 17;
+		contraintes.gridwidth = 7;
+		contraintes.gridheight = 1;
+		contraintes.fill = GridBagConstraints.HORIZONTAL;
+		contraintes.weightx = 0;
+		contraintes.weighty = 0;
+		progressBar.setBounds(749, 365, 146, 14);
+		//progressBar.setVisible(false);
+		progressBar.setStringPainted(true);
+		layoutPartieValidation.setConstraints(progressBar, contraintes);
+		partieValidation.add(progressBar);
+
+		// contraintes.gridx = 1;
+		// contraintes.gridy = 19;
+		// contraintes.gridwidth = 10; contraintes.gridheight = 9;
+		txtrBienvenueSurVisioscope
+				.setText("Bienvenue sur VisioScope, \nune application vous\npermettant d'effectuer\ndes visites virtuelles\nde n'importe quel site\ntouristique, archéologique\nou bien de monuments.\nEt ce n'importe où sur la\nTerre!\nCommencez par taper votre\nrecherche ci-dessus,\nchoisissez quel type de visite\nvous souhaitez effectuer et\ncliquez enfin sur le bouton \n\"Ok!");
+		txtrBienvenueSurVisioscope.setBackground(Color.DARK_GRAY);
+		txtrBienvenueSurVisioscope.setForeground(Color.GRAY);
+		// contraintes.fill = GridBagConstraints.HORIZONTAL ;
+		// contraintes.weightx = 0;
+		// contraintes.weighty = 0;
+		// layoutGauche.setConstraints(txtrBienvenueSurVisioscope, contraintes);
+		gauche.add(txtrBienvenueSurVisioscope);
+		gauche.add(txtrBienvenueSurVisioscope, BorderLayout.CENTER);
+
+		JPanel partieHaute = new JPanel();
+		GridLayout layoutPartieHaute = new GridLayout(2, 1, 1, 1);
+		partieHaute.setLayout(layoutPartieHaute);
+
+		droite.add(partieHaute, BorderLayout.NORTH);
+
+		JPanel panelTitre = new JPanel();
+		FlowLayout layoutPanelTitre = new FlowLayout(FlowLayout.CENTER, 1, 1);
+		panelTitre.setLayout(layoutPanelTitre);
+
+		JPanel boutonHaut = new JPanel();
+		GridLayout layoutBoutonHaut = new GridLayout(1, 3, 200, 1);
+		boutonHaut.setLayout(layoutBoutonHaut);
+
+		panelTitre.add(lblTitre);
+		partieHaute.add(panelTitre);
+		partieHaute.add(boutonHaut);
+		
+//		JLabel partieGauche = new JLabel();
+//		FlowLayout layoutPartieGauche = new FlowLayout();
+//		partieGauche.setLayout(layoutPartieGauche);
+//		partieGauche.add(btnSuivant);
+//		partieGauche.add(btnO);
+//		droite.add(partieGauche, BorderLayout.WEST);
+
+//		contraintes.gridx = 0;
+//		contraintes.gridy = 0;
+//		contraintes.gridwidth = 1;
+//		contraintes.gridheight = 1;
+//		contraintes.fill = GridBagConstraints.BOTH;
+//		contraintes.anchor = GridBagConstraints.WEST;
+//		contraintes.weightx = 50;
+//		contraintes.weighty = 50;
+//		layoutBoutonHaut.setConstraints(btnNo, contraintes);
+		//btnNo.setVisible(false);
+		btnNo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p1ou2 = 1;
-				visit1.move("prec", FenetrePropre.this);
+				visit1.move("NO", FenetreClean.this);
 				try {
 					GestionBoutons();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				System.out.println(p1ou2);
-
 			}
 		});
-		getContentPane().add(btnPrecedent);
+		boutonHaut.add(btnNo);
 
-		// ---------------------------BOUTON-SUIVANT----------------------------
-		btnSuivant.setBounds(1185, 365, 89, 31);
-		btnSuivant.setVisible(false);
-		btnSuivant.addActionListener(new ActionListener() {
+		// contraintes.gridx = 14;
+		// contraintes.gridy = 11;
+		// contraintes.gridwidth = 4;
+		// contraintes.gridheight = 4;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 50;
+		// contraintes.weighty = 50;
+		// layoutDroite.setConstraints(btnO, contraintes);
+		//btnO.setVisible(false);
+		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p1ou2 = 1;
-				visit1.move("suiv", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				System.out.println(p1ou2);
-
-			}
-		});
-		getContentPane().add(btnSuivant);
-
-		// ---------------------------BOUTON SUD----------------------------
-		btnS.setBounds(760, 614, 121, 122);
-		btnS.setVisible(false);
-		btnS.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("S", FenetrePropre.this);
+				visit1.move("O", FenetreClean.this);
 				try {
 					GestionBoutons();
 				} catch (SQLException e1) {
@@ -292,53 +436,27 @@ public class FenetrePropre extends JFrame {
 
 			}
 		});
-		getContentPane().add(btnS);
+		droite.add(btnO, BorderLayout.WEST);
+//		partieGauche.add(btnSuivant);
+//		partieGauche.add(btnO);
+		
+	
 
-		// ---------------------------BOUTON-SUD-EST----------------------------
-		btnSe.setBounds(1132, 566, 121, 122);
-		btnSe.setVisible(false);
-		btnSe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("SE", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(btnSe);
-
-		// ---------------------------BOUTON-SUD-OUEST----------------------------
-		btnSo.setBounds(333, 566, 135, 122);
-		btnSo.setVisible(false);
-		btnSo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("SO", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(btnSo);
-
-		// ---------------------------BOUTON-NORD----------------------------
-		btnN.setBounds(760, 35, 135, 122);
-
-		btnN.setVisible(false);
+//		contraintes.gridx = 1;
+//		contraintes.gridy = 0;
+//		contraintes.gridwidth = 1;
+//		contraintes.gridheight = 1;
+//		contraintes.fill = GridBagConstraints.BOTH;
+//		contraintes.anchor = GridBagConstraints.CENTER;
+//		contraintes.weightx = 50;
+//		contraintes.weighty = 50;
+//		layoutBoutonHaut.setConstraints(btnN, contraintes);
+		//btnN.setVisible(false);
 
 		btnN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p1ou2 = 1;
-				visit1.move("N", FenetrePropre.this);
+				visit1.move("N", FenetreClean.this);
 				try {
 					GestionBoutons();
 				} catch (SQLException e1) {
@@ -347,15 +465,22 @@ public class FenetrePropre extends JFrame {
 				}
 			}
 		});
-		getContentPane().add(btnN);
+		boutonHaut.add(btnN);
 
-		// ---------------------------BOUTON-NORD-EST----------------------------
-		btnNe.setBounds(1132, 88, 121, 122);
-		btnNe.setVisible(false);
+//		contraintes.gridx = 2;
+//		contraintes.gridy = 0;
+//		contraintes.gridwidth = 1;
+//		contraintes.gridheight = 1;
+//		contraintes.fill = GridBagConstraints.BOTH;
+//		contraintes.anchor = GridBagConstraints.EAST;
+//		contraintes.weightx = 50;
+//		contraintes.weighty = 50;
+//		layoutBoutonHaut.setConstraints(btnNe, contraintes);
+		//btnNe.setVisible(false);
 		btnNe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p1ou2 = 1;
-				visit1.move("NE", FenetrePropre.this);
+				visit1.move("NE", FenetreClean.this);
 				try {
 					GestionBoutons();
 				} catch (SQLException e1) {
@@ -365,32 +490,21 @@ public class FenetrePropre extends JFrame {
 
 			}
 		});
-		getContentPane().add(btnNe);
+		boutonHaut.add(btnNe);
 
-		// ---------------------------BOUTON-NORD-OUEST----------------------------
-		btnNo.setBounds(333, 88, 135, 122);
-		btnNo.setVisible(false);
-		btnNo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("NO", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		getContentPane().add(btnNo);
-
-		// ---------------------------BOUTON-EST----------------------------
-		btnE.setBounds(1132, 318, 121, 125);
-		btnE.setVisible(false);
+		// contraintes.gridx = 34;
+		// contraintes.gridy = 11;
+		// contraintes.gridwidth = 4;
+		// contraintes.gridheight = 4;
+		// contraintes.fill = GridBagConstraints.NONE;
+		// contraintes.weightx = 50;
+		// contraintes.weighty = 50;
+		// layoutDroite.setConstraints(btnE, contraintes);
+		//btnE.setVisible(false);
 		btnE.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p1ou2 = 1;
-				visit1.move("E", FenetrePropre.this);
+				visit1.move("E", FenetreClean.this);
 				try {
 					GestionBoutons();
 				} catch (SQLException e1) {
@@ -400,15 +514,153 @@ public class FenetrePropre extends JFrame {
 
 			}
 		});
-		getContentPane().add(btnE);
+		droite.add(btnE, BorderLayout.EAST);
 
-		// ---------------------------BOUTON-OUEST----------------------------
-		btnO.setBounds(333, 318, 135, 125);
-		btnO.setVisible(false);
+		// contraintes.gridx = 35;
+		// contraintes.gridy = 12;
+		// contraintes.gridwidth = 4;
+		// contraintes.gridheight = 2;
+		// contraintes.fill = GridBagConstraints.NONE;
+		// contraintes.weightx = 50;
+		// contraintes.weighty = 50;
+		// layoutDroite.setConstraints(btnPrecedent, contraintes);
+		// droite.add(btnPrecedent);
+
+		JPanel boutonBas = new JPanel();
+		GridLayout layoutBoutonBas = new GridLayout(2, 1, 1, 1);
+		boutonBas.setLayout(layoutBoutonBas);
+		droite.add(boutonBas, BorderLayout.SOUTH);
+
+		JPanel boutonBasIn = new JPanel();
+		GridLayout layoutBoutonBasIn = new GridLayout(1, 3, 200, 1);
+		boutonBasIn.setLayout(layoutBoutonBasIn);
+
+		boutonBas.add(boutonBasIn);
+
+		JPanel boutonBasBilk = new JPanel();
+		FlowLayout layoutBoutonBasBilk = new FlowLayout(FlowLayout.CENTER, 1, 1);
+		boutonBasBilk.setLayout(layoutBoutonBasBilk);
+
+		boutonBas.add(boutonBasBilk);
+
+		// contraintes.gridx = 14;
+		// contraintes.gridy = 21;
+		// contraintes.gridwidth = 4;
+		// contraintes.gridheight = 4;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 50;
+		// contraintes.weighty = 50;
+		// layoutDroite.setConstraints(btnSo, contraintes);
+		//btnSo.setVisible(false);
+		btnSo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("SO", FenetreClean.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		boutonBasIn.add(btnSo);
+
+		// contraintes.gridx = 24;
+		// contraintes.gridy = 21;
+		// contraintes.gridwidth = 4;
+		// contraintes.gridheight = 4;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 50;
+		// contraintes.weighty = 50;
+		// layoutDroite.setConstraints(btnS, contraintes);
+		//btnS.setVisible(false);
+		btnS.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("S", FenetreClean.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		boutonBasIn.add(btnS);
+
+		// contraintes.gridx = 34;
+		// contraintes.gridy = 21;
+		// contraintes.gridwidth = 4;
+		// contraintes.gridheight = 4;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 50;
+		// contraintes.weighty = 50;
+		// layoutDroite.setConstraints(btnSe, contraintes);
+		//btnSe.setVisible(false);
+		btnSe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p1ou2 = 1;
+				visit1.move("SE", FenetreClean.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		boutonBasIn.add(btnSe);
+
+		// contraintes.gridx = 19;
+		// contraintes.gridy = 6;
+		// contraintes.gridwidth = 14;
+		// contraintes.gridheight = 14;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 100;
+		// contraintes.weighty = 100;
+		// layoutDroite.setConstraints(btnCentral, contraintes);
+		droite.add(btnCentral, BorderLayout.CENTER);
+
+		// contraintes.gridx = 15;
+		// contraintes.gridy = 35;
+		// contraintes.gridwidth = 3;
+		// contraintes.gridheight = 3;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 100;
+		// contraintes.weighty = 100;
+		// layoutDroite.setConstraints(button1, contraintes);
+		//button1.setVisible(false);
+		btnO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				visit1.move("2prec", FenetreClean.this);
+				try {
+					GestionBoutons();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		boutonBasBilk.add(button1);
+
+		// contraintes.gridx = 19;
+		// contraintes.gridy = 35;
+		// contraintes.gridwidth = 3;
+		// contraintes.gridheight = 3;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 100;
+		// contraintes.weighty = 100;
+		// layoutDroite.setConstraints(button2, contraintes);
+		//button2.setVisible(false);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p1ou2 = 1;
-				visit1.move("O", FenetrePropre.this);
+				visit1.move("prec", FenetreClean.this);
 				try {
 					GestionBoutons();
 				} catch (SQLException e1) {
@@ -418,14 +670,31 @@ public class FenetrePropre extends JFrame {
 
 			}
 		});
-		getContentPane().add(btnO);
+		boutonBasBilk.add(button2);
 
-		// ---------------------------BOUTON-IMAGE1----------------------------
-		button1.setBounds(530, 670, 89, 81);
-		button1.setVisible(false);
+		// contraintes.gridx = 23;
+		// contraintes.gridy = 35;
+		// contraintes.gridwidth = 3;
+		// contraintes.gridheight = 3;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 100;
+		// contraintes.weighty = 100;
+		// layoutDroite.setConstraints(button3, contraintes);
+		//button3.setVisible(false);
+		boutonBasBilk.add(button3);
+
+		// contraintes.gridx = 27;
+		// contraintes.gridy = 35;
+		// contraintes.gridwidth = 3;
+		// contraintes.gridheight = 3;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 100;
+		// contraintes.weighty = 100;
+		// layoutDroite.setConstraints(button4, contraintes);
+		//button4.setVisible(false);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				visit1.move("2prec", FenetrePropre.this);
+				visit1.move("suiv", FenetreClean.this);
 				try {
 					GestionBoutons();
 				} catch (SQLException e1) {
@@ -435,15 +704,20 @@ public class FenetrePropre extends JFrame {
 
 			}
 		});
-		getContentPane().add(button1);
+		boutonBasBilk.add(button4);
 
-		// ---------------------------BOUTON-IMAGE2----------------------------
-		button2.setBounds(661, 670, 89, 81);
-		button2.setVisible(false);
+		// contraintes.gridx = 31;
+		// contraintes.gridy = 35;
+		// contraintes.gridwidth = 3;
+		// contraintes.gridheight = 3;
+		// contraintes.fill = GridBagConstraints.BOTH;
+		// contraintes.weightx = 100;
+		// contraintes.weighty = 100;
+		// layoutDroite.setConstraints(button5, contraintes);
+		//button5.setVisible(false);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				p1ou2 = 1;
-				visit1.move("prec", FenetrePropre.this);
+				visit1.move("2suiv", FenetreClean.this);
 				try {
 					GestionBoutons();
 				} catch (SQLException e1) {
@@ -453,50 +727,17 @@ public class FenetrePropre extends JFrame {
 
 			}
 		});
-		getContentPane().add(button2);
+		boutonBasBilk.add(button5);
 
-		// ---------------------------BOUTON-IMAGE3----------------------------
-		button3.setBounds(770, 670, 89, 81);
-		button3.setVisible(false);
-		getContentPane().add(button3);
-
-		// ---------------------------BOUTON-IMAGE4----------------------------
-		button4.setBounds(908, 670, 89, 81);
-		button4.setVisible(false);
-		btnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				visit1.move("suiv", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(button4);
-
-		// ---------------------------BOUTON-IMAGE5----------------------------
-		button5.setBounds(1026, 670, 89, 81);
-		button5.setVisible(false);
-		btnO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				visit1.move("2suiv", FenetrePropre.this);
-				try {
-					GestionBoutons();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-			}
-		});
-		getContentPane().add(button5);
-
-		// ---------------------------BOUTON-QUITTER----------------------------
-		btnQuitter.setBounds(1164, 699, 89, 23);
-		btnQuitter.setVisible(false);
+		// contraintes.gridx = 35;
+		// contraintes.gridy = 26;
+		// contraintes.gridwidth = 4;
+		// contraintes.gridheight = 2;
+		// contraintes.fill = GridBagConstraints.NONE;
+		// contraintes.weightx = 100;
+		// contraintes.weighty = 100;
+		// layoutDroite.setConstraints(btnQuitter, contraintes);
+		//btnQuitter.setVisible(false);
 		btnQuitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				BoutonsInterfaceDeplacementInvisible();
@@ -509,29 +750,9 @@ public class FenetrePropre extends JFrame {
 				choixNbOut.setVisible(true);
 			}
 		});
-		getContentPane().add(btnQuitter);
-
-		progressBar.setBounds(749, 365, 146, 14);
-		progressBar.setVisible(false);
-		progressBar.setStringPainted(true);
-		getContentPane().add(progressBar);
-
-		// ---------------------------BOUTON-IMAGE-CENTRALE----------------------------
-		btnCentral.setBounds(593, 212, 457, 359);
-		btnCentral.setVisible(false);
-		btnCentral.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1ou2 = (p1ou2 == 1) ? 2 : 1;
-				affichageImage();
-
-			}
-		});
-		btnCentral.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		btnCentral.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
-		getContentPane().add(btnCentral);
-
+		boutonBasBilk.add(btnQuitter);
 	}
-
+	
 	public void BoutonsInterfaceDeplacementInvisible() {
 		btnSuivant.setVisible(false);
 		btnPrecedent.setVisible(false);
@@ -551,7 +772,6 @@ public class FenetrePropre extends JFrame {
 		btnCentral.setVisible(false);
 		btnQuitter.setVisible(false);
 	}
-
 	public void GestionBoutons() throws SQLException {
 		if (visit1.getVisitState() == 1) {
 			System.out.println("Longitude(x) = " + visit1.tabOutDoor[visit1.ligne][visit1.colonne].getPic(p1ou2).getLongitudeP());

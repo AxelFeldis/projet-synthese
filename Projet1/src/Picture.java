@@ -17,8 +17,7 @@ public class Picture {
 	private Date dateP = new Date();
 	private GeoData positionGeographique;
 
-	Picture(Photo p, GeoInterface geo, String tag) throws IOException,
-			SAXException, FlickrException {
+	Picture(Photo p, GeoInterface geo, String tag) throws IOException, SAXException, FlickrException {
 		mediumUrl = p.getMediumUrl();
 		largeUrl = p.getLargeUrl();
 		smallUrl = p.getSmallUrl();
