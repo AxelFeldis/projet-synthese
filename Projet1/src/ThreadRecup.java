@@ -6,12 +6,12 @@ import com.aetrion.flickr.FlickrException;
 
 class ThreadRecup extends Thread {
 
-	private FenetrePropre fenetre;
+	private FenetreClean fenetre;
 	private int nbPhotosOut;
 	private int nbPhotosBilk;
 	private int nbPhotosIn;
 
-	public ThreadRecup(int nbPOut, int nbPBilk, int nbPIn, FenetrePropre f) {
+	public ThreadRecup(int nbPOut, int nbPBilk, int nbPIn, FenetreClean f) {
 		fenetre = f;
 		nbPhotosIn = nbPIn;
 		nbPhotosOut = nbPOut;

@@ -21,14 +21,10 @@ public class Site {
 		// Connexion a la base de
 		// donnee***************************************************
 		try {
-			// Class.forName("org.postgresql.Driver");
-			System.out.println("Driver O.K.");
-
-			// String url = "jdbc:postgresql://localhost:5432/Visioscope";
+			//connection avec la base de données
 			String url = "jdbc:postgresql://postgresql1.alwaysdata.com/visioscope_visio";
 			String user = "visioscope";
 			String passwd = "visioscope3000";
-
 			conn = DriverManager.getConnection(url, user, passwd);
 			System.out.println("Connexion effective !");
 
@@ -37,6 +33,7 @@ public class Site {
 		}
 	}
 
+	//------------------------------------------------------------GETTER--------------------------------------------------------\\
 	public Connection getConnection() {
 		return conn;
 	}
@@ -77,6 +74,7 @@ public class Site {
 		return largeurZone;
 	}
 
+	//Methode qui récupère les attributs dans la base de données et qui les
 	public void retrieveGeoSite(String st) throws SQLException {
 
 		// Récupération du nom du Monument
@@ -180,8 +178,8 @@ public class Site {
 			}
 		}
 		resultHautM.close();
-
 		state.close();
+		
 
 	}
 

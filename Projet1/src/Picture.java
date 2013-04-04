@@ -4,6 +4,7 @@ import org.xml.sax.SAXException;
 import com.aetrion.flickr.FlickrException;
 import com.aetrion.flickr.photos.GeoData;
 import com.aetrion.flickr.photos.Photo;
+import com.aetrion.flickr.photos.Size;
 import com.aetrion.flickr.photos.geo.GeoInterface;
 
 public class Picture {
@@ -16,6 +17,9 @@ public class Picture {
 	private String tagP = "Pas de Photos";
 	private Date dateP = new Date();
 	private GeoData positionGeographique;
+//	private Size taille = new Size();
+//	private Integer height = new Integer(0);
+//	private Integer width = new Integer(0);
 
 	Picture(Photo p, GeoInterface geo, String tag) throws IOException, SAXException, FlickrException {
 		mediumUrl = p.getMediumUrl();
@@ -25,11 +29,22 @@ public class Picture {
 		longitudeP = positionGeographique.getLongitude();
 		latitudeP = positionGeographique.getLatitude();
 		tagP = tag;
+//		taille = p.getSize();
+//		height = taille.getHeight();
+//		width = taille.getWidth();
 
 	}
 
 	Picture() {
 	}
+	
+//	public int getPicHeight() {
+//		return height;
+//	}
+//
+//	public int getPicWidht() {
+//		return width;
+//	}
 
 	public String getTag() {
 		return tagP;

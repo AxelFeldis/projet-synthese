@@ -21,7 +21,7 @@ public class Visit {
 	private static PhotoList listePhoto1;
 	private int compteur = 0;
 
-	PairOfPictures[] tabBilk;
+	Picture[] tabBilk;
 	PairOfPictures[][] tabInDoor;
 	PairOfPictures[][] tabOutDoor;
 	int colonne = 0;
@@ -49,7 +49,7 @@ public class Visit {
 		this.visitState = state;
 	}
 
-	public void move(String direction, FenetrePropre f) {
+	public void move(String direction, FenetreClean f) {
 		switch (direction) {
 
 		case "O":
@@ -118,7 +118,7 @@ public class Visit {
 
 	}
 
-	public void recupererPhotosBilk(int nbPhotos, FenetrePropre f) throws IOException, SAXException, FlickrException {
+	public void recupererPhotosBilk(int nbPhotos, FenetreClean f) throws IOException, SAXException, FlickrException {
 		// création d'un élément de type Flickr
 		Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122");
 		// création d'un élément de type PhotoInterface
@@ -126,7 +126,7 @@ public class Visit {
 		// creation d'un élément de type GeoInterface
 		geoInterface = apiAccess.getGeoInterface();
 		PhotoList listePhoto1 = new PhotoList();
-		tabBilk = new PairOfPictures[nbPhotos];
+		tabBilk = new Picture[nbPhotos];
 		// Création d'un paramètre de recherche
 		SearchParameters param = new SearchParameters();
 		String[] tabTags = { nameV };
@@ -137,7 +137,7 @@ public class Visit {
 
 		try {
 			// Récupération d'uneliste de photos
-			listePhoto1 = photosInterface.search(param, (2 * nbPhotos), 0);
+			listePhoto1 = photosInterface.search(param, (nbPhotos), 0);
 		} catch (FlickrException e3) {
 			// System.out.println(e3.getErrorMessage());
 			System.out.println("yo c'est l'erreur 1");
@@ -155,28 +155,27 @@ public class Visit {
 			f.progressBar.setMaximum((Integer) f.choixNbOut.getSelectedItem() + (listePhoto1.size() / 2));
 
 		}
-		for (int compt1 = 0, step = 0; compt1 <= tabBilk.length - 1; compt1++) {
+		for (int compt1 = 0; compt1 <= listePhoto1.size() - 1; compt1++) {
 			compteur++;
 			f.progressBar.setValue(compteur);
-			Photo pic = (Photo) listePhoto1.get(step);
-			step++;
-			Photo pic1 = (Photo) listePhoto1.get(step);
-			step++;
+			Photo pic = (Photo) listePhoto1.get(compt1);
+			// step++;
+			// Photo pic1 = (Photo) listePhoto1.get(step);
+			// step++;
 			Picture pict = new Picture(pic, geoInterface, nameV);
-			Picture pict1 = new Picture(pic1, geoInterface, nameV);
-			PairOfPictures pair = new PairOfPictures(pict, pict1);
-			tabBilk[compt1] = pair;
+			// Picture pict1 = new Picture(pic1, geoInterface, nameV);
+			// PairOfPictures pair = new PairOfPictures(pict, pict1);
+			tabBilk[compt1] = pict;
 			System.out.println("/////////////////////////////PHOTO BILK//////////////////////////");
 			System.out.println("Url de la photo : " + pict.getMediumUrl());
 			System.out.println("tag de la photo : " + pict.getTag());
 			System.out.println("Latitude : " + pict.getLatitudeP());
 			System.out.println("Longitude : " + pict.getLongitudeP());
 		}
-		f.btnBilk.setVisible(true);
+		f.btnBilk.setEnabled(true);
 	}
 
-	public void retrievePictureOutDoor(int nbPhotos, double longMin, double latMin, double longMax, double latMax, FenetrePropre f) throws IOException,
-			SAXException, FlickrException {
+	public void retrievePictureOutDoor(int nbPhotos, double longMin, double latMin, double longMax, double latMax, FenetreClean f) throws IOException, SAXException, FlickrException {
 		Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122");
 		// création d'un élément de type PhotoInterface
 		photosInterface = apiAccess.getPhotosInterface();
@@ -214,12 +213,30 @@ public class Visit {
 					if (!listePhoto1.isEmpty()) {
 						Photo pic = (Photo) listePhoto1.get(0);
 						Picture pict = new Picture(pic, geoInterface, nameV);
-						pair.setPic1(pict);
-						System.out.println("/////////////////////////////PHOTO OUTDOOR 1//////////////////////////");
-						System.out.println("Url de la photo : " + pict.getMediumUrl());
-						System.out.println("tag de la photo : " + pict.getTag());
-						System.out.println("Latitude : " + pict.getLatitudeP());
-						System.out.println("Longitude : " + pict.getLongitudeP());
+						if (f.site.getLargeurMonument() != 0) {
+							if (!((pict.getLongitudeP() < (f.site.getLongitudeMonument() + (f.site.getLargeurMonument() / 2)))
+									&& (pict.getLongitudeP() > (f.site.getLongitudeMonument() - (f.site.getLargeurMonument() / 2)))
+									&& (pict.getLatitudeP() > (f.site.getLatitudeMonument() - (f.site.getHauteurMonument() / 2))) && (pict.getLatitudeP() < (f.site.getLatitudeMonument() + (f.site
+									.getHauteurMonument() / 2))))) {
+								pair.setPic1(pict);
+
+								System.out.println("/////////////////////////////PHOTO OUTDOOR 1//////////////////////////");
+								System.out.println("Url de la photo : " + pict.getMediumUrl());
+								System.out.println("tag de la photo : " + pict.getTag());
+								System.out.println("Latitude : " + pict.getLatitudeP());
+								System.out.println("Longitude : " + pict.getLongitudeP());
+							} else {
+								System.out.println("cette photo n'est pas dans la zone");
+							}
+						} else {
+							pair.setPic1(pict);
+
+							System.out.println("/////////////////////////////PHOTO OUTDOOR 1 sans INDOOR//////////////////////////");
+							System.out.println("Url de la photo : " + pict.getMediumUrl());
+							System.out.println("tag de la photo : " + pict.getTag());
+							System.out.println("Latitude : " + pict.getLatitudeP());
+							System.out.println("Longitude : " + pict.getLongitudeP());
+						}
 					} else {
 						System.out.println("pas de Photo1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 					}
@@ -227,12 +244,30 @@ public class Visit {
 					if (!listePhoto1.isEmpty()) {
 						Photo pic1 = (Photo) listePhoto1.get(0);
 						Picture pict1 = new Picture(pic1, geoInterface, nameV);
-						pair.setPic2(pict1);
-						System.out.println("/////////////////////////////PHOTO OUTDOOR 2//////////////////////////");
-						System.out.println("Url de la photo : " + pict1.getMediumUrl());
-						System.out.println("tag de la photo : " + pict1.getTag());
-						System.out.println("Latitude : " + pict1.getLatitudeP());
-						System.out.println("Longitude : " + pict1.getLongitudeP());
+						if (f.site.getLargeurMonument() != 0) {
+							if (!((pict1.getLongitudeP() < (f.site.getLongitudeMonument() + (f.site.getLargeurMonument() / 2)))
+									&& (pict1.getLongitudeP() > (f.site.getLongitudeMonument() - (f.site.getLargeurMonument() / 2)))
+									&& (pict1.getLatitudeP() > (f.site.getLatitudeMonument() - (f.site.getHauteurMonument() / 2))) && (pict1.getLatitudeP() < (f.site.getLatitudeMonument() + (f.site
+									.getHauteurMonument() / 2))))) {
+								pair.setPic2(pict1);
+
+								System.out.println("/////////////////////////////PHOTO OUTDOOR 2//////////////////////////");
+								System.out.println("Url de la photo : " + pict1.getMediumUrl());
+								System.out.println("tag de la photo : " + pict1.getTag());
+								System.out.println("Latitude : " + pict1.getLatitudeP());
+								System.out.println("Longitude : " + pict1.getLongitudeP());
+							} else {
+								System.out.println("cette photo n'est pas dans la zone");
+							}
+						} else {
+							pair.setPic2(pict1);
+
+							System.out.println("/////////////////////////////PHOTO OUTDOOR 2 sans INDOOR//////////////////////////");
+							System.out.println("Url de la photo : " + pict1.getMediumUrl());
+							System.out.println("tag de la photo : " + pict1.getTag());
+							System.out.println("Latitude : " + pict1.getLatitudeP());
+							System.out.println("Longitude : " + pict1.getLongitudeP());
+						}
 					} else {
 						System.out.println("pas de Photo2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 					}
@@ -260,12 +295,30 @@ public class Visit {
 					if (!listePhoto1.isEmpty()) {
 						Photo pic = (Photo) listePhoto1.get(0);
 						Picture pict = new Picture(pic, geoInterface, nameV);
-						pair.setPic1(pict);
-						System.out.println("/////////////////////////////PHOTO OUTDOOR 1//////////////////////////");
-						System.out.println("Url de la photo : " + pict.getMediumUrl());
-						System.out.println("tag de la photo : " + pict.getTag());
-						System.out.println("Latitude : " + pict.getLatitudeP());
-						System.out.println("Longitude : " + pict.getLongitudeP());
+						if (f.site.getLargeurMonument() != 0) {
+							if (!((pict.getLongitudeP() < (f.site.getLongitudeMonument() + (f.site.getLargeurMonument() / 2)))
+									&& (pict.getLongitudeP() > (f.site.getLongitudeMonument() - (f.site.getLargeurMonument() / 2)))
+									&& (pict.getLatitudeP() > (f.site.getLatitudeMonument() - (f.site.getHauteurMonument() / 2))) && (pict.getLatitudeP() < (f.site.getLatitudeMonument() + (f.site
+									.getHauteurMonument() / 2))))) {
+								pair.setPic1(pict);
+
+								System.out.println("/////////////////////////////PHOTO OUTDOOR 1//////////////////////////");
+								System.out.println("Url de la photo : " + pict.getMediumUrl());
+								System.out.println("tag de la photo : " + pict.getTag());
+								System.out.println("Latitude : " + pict.getLatitudeP());
+								System.out.println("Longitude : " + pict.getLongitudeP());
+							} else {
+								System.out.println("cette photo n'est pas dans la zone");
+							}
+						} else {
+							pair.setPic1(pict);
+
+							System.out.println("/////////////////////////////PHOTO OUTDOOR 1 sans INDOOR//////////////////////////");
+							System.out.println("Url de la photo : " + pict.getMediumUrl());
+							System.out.println("tag de la photo : " + pict.getTag());
+							System.out.println("Latitude : " + pict.getLatitudeP());
+							System.out.println("Longitude : " + pict.getLongitudeP());
+						}
 					} else {
 						System.out.println("pas de Photo1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 					}
@@ -273,12 +326,30 @@ public class Visit {
 					if (!listePhoto1.isEmpty()) {
 						Photo pic1 = (Photo) listePhoto1.get(0);
 						Picture pict1 = new Picture(pic1, geoInterface, nameV);
-						pair.setPic2(pict1);
-						System.out.println("/////////////////////////////PHOTO OUTDOOR 2//////////////////////////");
-						System.out.println("Url de la photo : " + pict1.getMediumUrl());
-						System.out.println("tag de la photo : " + pict1.getTag());
-						System.out.println("Latitude : " + pict1.getLatitudeP());
-						System.out.println("Longitude : " + pict1.getLongitudeP());
+						if (f.site.getLargeurMonument() != 0) {
+							if (!((pict1.getLongitudeP() < (f.site.getLongitudeMonument() + (f.site.getLargeurMonument() / 2)))
+									&& (pict1.getLongitudeP() > (f.site.getLongitudeMonument() - (f.site.getLargeurMonument() / 2)))
+									&& (pict1.getLatitudeP() > (f.site.getLatitudeMonument() - (f.site.getHauteurMonument() / 2))) && (pict1.getLatitudeP() < (f.site.getLatitudeMonument() + (f.site
+									.getHauteurMonument() / 2))))) {
+								pair.setPic2(pict1);
+
+								System.out.println("/////////////////////////////PHOTO OUTDOOR 2//////////////////////////");
+								System.out.println("Url de la photo : " + pict1.getMediumUrl());
+								System.out.println("tag de la photo : " + pict1.getTag());
+								System.out.println("Latitude : " + pict1.getLatitudeP());
+								System.out.println("Longitude : " + pict1.getLongitudeP());
+							} else {
+								System.out.println("cette photo n'est pas dans la zone");
+							}
+						} else {
+							pair.setPic2(pict1);
+
+							System.out.println("/////////////////////////////PHOTO OUTDOOR 2 sans INDOOR//////////////////////////");
+							System.out.println("Url de la photo : " + pict1.getMediumUrl());
+							System.out.println("tag de la photo : " + pict1.getTag());
+							System.out.println("Latitude : " + pict1.getLatitudeP());
+							System.out.println("Longitude : " + pict1.getLongitudeP());
+						}
 					} else {
 						System.out.println("pas de Photo2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 					}
@@ -310,11 +381,10 @@ public class Visit {
 			f.progressBar.setVisible(false);
 			compteur = 0;
 		}
-		f.btnOut.setVisible(true);
+		f.btnOut.setEnabled(true);
 	}
 
-	public void retrievePictureIndoor(int nbPhotos, double longMin, double latMin, double longMax, double latMax, FenetrePropre f) throws IOException,
-			SAXException, FlickrException {
+	public void retrievePictureIndoor(int nbPhotos, double longMin, double latMin, double longMax, double latMax, FenetreClean f) throws IOException, SAXException, FlickrException {
 		Flickr apiAccess = new Flickr("f5c2fede0f18c646f5e997586dc9c122");
 		// création d'un élément de type PhotoInterface
 		photosInterface = apiAccess.getPhotosInterface();
@@ -444,7 +514,7 @@ public class Visit {
 				yMin = yMin - yStep;
 			}
 		}
-		f.btnIn.setVisible(true);
+		f.btnIn.setEnabled(true);
 		f.progressBar.setVisible(false);
 		compteur = 0;
 	}
